@@ -1,11 +1,21 @@
-import { SingleCoin } from './single-coin'
+import { Tabs } from 'antd'
+import { CoinTab } from './tabs/CoinTab'
+import LogTab from './tabs/LogTab'
 
 export default function App() {
   return (
     <div>
-      {['BTC', /* 'ETH', 'BNB', 'DOGE', 'BCH','SUI','1000SHIB','1000PEPE','1000FLOKI','DIA' */].map((item) => (
-        <SingleCoin key={item} coin={item} />
-      ))}
+      <Tabs
+        defaultActiveKey="Home"
+        items={[
+          { label: 'Home', key: 'Home', children: <CoinTab /> },
+          {
+            label: 'Log',
+            key: 'Log',
+            children: <LogTab />
+          }
+        ]}
+      />
     </div>
   )
 }

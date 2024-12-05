@@ -24,7 +24,7 @@ export function LineChar({
         grid: {
           top: '3%',
           left: '0%',
-          right: '0%',
+          right: '2%',
           bottom: '0%',
           containLabel: true
         },
@@ -64,5 +64,5 @@ export function LineChar({
       })
     }, 250)
   }, [klines])
-  return <div style={{ width: '96%', height: '250px' }} ref={containerRef}></div>
+  return <div style={{ width: '100%', height: '250px' }} ref={containerRef}></div>
 }
