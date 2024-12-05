@@ -1,6 +1,6 @@
 import { it, expect, describe } from 'vitest' // 确保使用正确的导入
 import { fetchContinuousKlines } from './fetchContinuousKlines'
-import { I_continuous_klines } from '../types'
+import { I_continuous_klines } from '../../common/types'
 
 describe('fetch-binance', () => {
   it(
