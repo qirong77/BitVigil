@@ -5,7 +5,7 @@ https://developers.binance.com/docs/zh-CN/derivatives/usds-margined-futures/mark
 import fetch from 'node-fetch'
 import { HttpsProxyAgent } from 'https-proxy-agent'
 import { REQUEST_HEADER } from './REQUEST_HEADER'
-import { I_continuous_klines } from '../types'
+import { I_continuous_klines } from '../../common/types'
 // export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
 const proxyUrl = `http://127.0.0.1:7890`
 const proxyAgent = new HttpsProxyAgent(proxyUrl)
@@ -85,6 +85,7 @@ export function fetchContinuousKlines(coin = 'SUI', limit = 300, interval = 1, t
         })
       })
       .catch((err) => {
+        console.log(err)
         resolve([])
       })
   })

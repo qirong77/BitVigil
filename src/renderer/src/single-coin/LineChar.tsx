@@ -21,6 +21,13 @@ export function LineChar({
       echartInstance.current = echarts.init(containerRef.current)
       echartInstance.current.setOption({
         animation: false,
+        grid: {
+          top: '3%',
+          left: '0%',
+          right: '0%',
+          bottom: '0%',
+          containLabel: true
+        },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -57,5 +64,5 @@ export function LineChar({
       })
     }, 250)
   }, [klines])
-  return <div style={{ width: '100%', height: '240px' }} ref={containerRef}></div>
+  return <div style={{ width: '96%', height: '250px' }} ref={containerRef}></div>
 }
