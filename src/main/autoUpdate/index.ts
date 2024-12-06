@@ -5,7 +5,7 @@ import { fetchContinuousKlines } from '../fetch-binance/fetchContinuousKlines'
 export async function runAutoUpdateTask() {
   for (const coin of MAIN_COINS) {
     try {
-      const klines = await fetchContinuousKlines(coin, 600, 1)
+      const klines = await fetchContinuousKlines(coin, 600, 1,1000 * 15)
       await tableCoinWave.updateTableRowCoinWave(coin, klines)
     } catch (error) {
       console.log('runTask出错！！！', coin)
