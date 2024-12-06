@@ -121,7 +121,10 @@ async function updateTableRowCoinWave(coin: string, klines: I_continuous_klines[
     return setRowValue(row, changePercentNumber)
   })
   const res = await supabase.from('coin_wave').upsert(newRows)
-  return res
+  return {
+    res,
+    newRows
+  }
   function setRowValue(row: I_table_row_coin_wave, value: number) {
     value = value * 100
     if (value > 0 && value <= 1) {

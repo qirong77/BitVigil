@@ -14,11 +14,15 @@ describe('supabase', () => {
       timeout: 10000
     }
   ),
-    it('updateTableRowCoinWave', async () => {
-      const klines = await fetchContinuousKlines('SUI', 600, 1)
-      const res = await tableCoinWave.updateTableRowCoinWave('SUI', klines)
-      expect(res?.status === 200).toBeTruthy()
-    },{
-      timeout: 10000
-    })
+    it(
+      'updateTableRowCoinWave',
+      async () => {
+        const klines = await fetchContinuousKlines('SUI', 600, 1)
+        const data = await tableCoinWave.updateTableRowCoinWave('SUI', klines)
+        expect(data?.res?.status === 200).toBeTruthy()
+      },
+      {
+        timeout: 10000
+      }
+    )
 })
