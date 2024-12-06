@@ -32,7 +32,7 @@ function SingleCoinWaveBarChar({ coin }: { coin: string }) {
     }
     const xLabel = Object.keys(row).filter((key) => key.startsWith('c_'))
     const yLabel = xLabel.map((item) => row[item])
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       echarInstance.current?.dispose()
       echarInstance.current = echarts.init(containerRef.current!)
       echarInstance.current.setOption({
@@ -71,11 +71,10 @@ function SingleCoinWaveBarChar({ coin }: { coin: string }) {
           }
         ]
       })
-    })
+    },100)
   }, [])
   useEffect(() => {
     tableCoinWave.getTableRowCoinWave(coin).then((res) => {
-      console.log(res)
       setCoinWaveRows(res)
       updateEChart(15, res)
     })

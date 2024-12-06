@@ -102,7 +102,7 @@ function getTableRowCoinWave(coin: string) {
           .from('coin_wave')
           .insert(rows)
           .then((res) => {
-            if(res.status === 201) {
+            if (res.status === 201) {
               resolve(rows)
               return
             }
@@ -114,25 +114,15 @@ function getTableRowCoinWave(coin: string) {
 
 async function updateTableRowCoinWave(coin: string, klines: I_continuous_klines[]) {
   if (klines.length !== 600) {
-    console.log('klines.length !== 600', coin, klines.length)
     return
   }
   const rows = await getTableRowCoinWave(coin)
   const newRows = rows.map((row) => {
-    const klinesLimit = klines.slice(-row.time_range)
-    const changeInfo = getChangePercent10h(klinesLimit)
+    const changeInfo = getChangePercent10h(klines,row.time_range)
     return setRowValue(row, changeInfo)
   })
   const res = await supabase.from('coin_wave').upsert(newRows)
   return res
-  function getChangePercent10h(klines: I_continuous_klines[], timeLimit = 15) {
-    const min = Math.min(...klines.map((item) => item.end_time_price))
-    const max = Math.max(...klines.map((item) => item.end_time_price))
-    const minLast15 = Math.min(...klines.slice(-timeLimit).map((item) => item.end_time_price))
-    const maxLast15 = Math.max(...klines.slice(-timeLimit).map((item) => item.end_time_price))
-    const changePercent = (maxLast15 - minLast15) / (max - min)
-    return Number(changePercent.toFixed(2))
-  }
   function setRowValue(row: I_table_row_coin_wave, value: number) {
     value = value * 100
     if (value >= 0 && value <= 5) {
@@ -218,7 +208,14 @@ async function updateTableRowCoinWave(coin: string, klines: I_continuous_klines[
     return row
   }
 }
-
+export function getChangePercent10h(klines: I_continuous_klines[], timeLimit) {
+  const min = Math.min(...klines.map((item) => item.end_time_price))
+  const max = Math.max(...klines.map((item) => item.end_time_price))
+  const minLast15 = Math.min(...klines.slice(-timeLimit).map((item) => item.end_time_price))
+  const maxLast15 = Math.max(...klines.slice(-timeLimit).map((item) => item.end_time_price))
+  const changePercent = (maxLast15 - minLast15) / (max - min)
+  return Number(changePercent.toFixed(2))
+}
 export const tableCoinWave = {
   getTableRowCoinWave,
   updateTableRowCoinWave
