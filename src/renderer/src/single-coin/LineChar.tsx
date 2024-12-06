@@ -20,7 +20,6 @@ export function LineChar({
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           updateKlineMethod(600, 1, false)
-        } else {
         }
       })
     })

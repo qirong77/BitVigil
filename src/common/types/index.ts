@@ -16,14 +16,6 @@ export interface I_continuous_klines {
   time: number
 }
 
-export interface I_coin_wave_settings {
-  coin: string
-  15: number
-  30: number
-  60: number
-  120: number
-  240: number
-}
 
 export interface I_coin_wave {
   id: string

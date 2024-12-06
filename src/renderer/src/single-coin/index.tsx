@@ -22,7 +22,7 @@ export function SingleCoin({ coin }) {
       >
         <span>{coin}</span>
         <KlineTimeFilter updateKline={klineData.update} />
-        <KlineAlalysis/>
+        <KlineAlalysis coin={coin}/>
         <AlertFilled
           onClick={() => setOpenAlert(!openAlert)}
           style={{ cursor: 'pointer', color: openAlert ? 'red' : '' }}
