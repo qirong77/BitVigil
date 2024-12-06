@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { runAutoUpdateTask } from './autoUpdate'
 
 function createWindow(): void {
   // Create the browser window.
@@ -40,6 +41,9 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   import('./event')
+  setTimeout(() => {
+    runAutoUpdateTask()
+  }, 1000)
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 

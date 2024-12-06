@@ -24,6 +24,7 @@
     "@ant-design/icons": "^5.5.2",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@supabase/supabase-js": "^2.47.1",
     "antd": "^5.22.3",
     "echarts": "^5.5.1",
     "node-fetch": "^2.7.0",

@@ -17,16 +17,16 @@ export function KlineTimeFilter({ updateKline }) {
           onChange={(e) => {
             const value = e.target.value
             if (value === 10) {
-              updateKline(600, 1).then(() => setValue(10))
+              updateKline(600, 1, true).then(() => setValue(10))
             }
             if (value === 24) {
-              updateKline(288, 5).then(() => setValue(24))
+              updateKline(288, 5, true).then(() => setValue(24))
             }
             if (value === 48) {
-              updateKline(576, 5).then(() => setValue(48))
+              updateKline(576, 5, true).then(() => setValue(48))
             }
             if (value === 72) {
-              updateKline(864, 15).then(() => setValue(72))
+              updateKline(864, 15, true).then(() => setValue(72))
             }
           }}
         >

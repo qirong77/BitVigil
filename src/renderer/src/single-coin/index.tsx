@@ -2,7 +2,7 @@ import { AlertFilled, FilterFilled, ReloadOutlined } from '@ant-design/icons'
 import { LineChar } from './LineChar'
 import { useKlineData } from './useKlineData'
 import { useState } from 'react'
-import { Popover, Radio, Spin } from 'antd'
+import { Spin } from 'antd'
 import { KlineTimeFilter } from './KlineTimeFilter'
 import { KlineAlalysis } from './KLineAnalysis'
 
@@ -37,7 +37,7 @@ export function SingleCoin({ coin }) {
           justifyContent: 'center'
         }}
       >
-        <LineChar klines={klineData.klines} klineInfo={klineData.klineInfo!} />
+        <LineChar updateKlineMethod={klineData.update} klines={klineData.klines} klineInfo={klineData.klineInfo!} />
       </div>
     </div>
   )

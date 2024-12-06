@@ -54,7 +54,7 @@ function BinanceToTableData(coin: string, items: number[]) {
   return obj
 }
 export function fetchContinuousKlines(coin = 'SUI', limit = 300, interval = 1, timeout = 1000 * 8) {
-  return new Promise((resolve, reject) => {
+  return new Promise<I_continuous_klines[]>((resolve, reject) => {
     let success = false
     setTimeout(() => {
       if (!success) {

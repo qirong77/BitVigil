@@ -6,13 +6,27 @@ import { IKlineInfo } from '../../../common/kline/getKlineInfo'
 
 export function LineChar({
   klines,
-  klineInfo
+  klineInfo,
+  updateKlineMethod
 }: {
   klines: I_continuous_klines[]
   klineInfo: IKlineInfo
+  updateKlineMethod: (limit?: number, interval?: number, immediate?: boolean) => void
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const echartInstance = useRef<echarts.ECharts>(null)
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          updateKlineMethod(600, 1, false)
+        } else {
+        }
+      })
+    })
+    observer.observe(containerRef.current!)
+    return () => observer.disconnect()
+  }, [])
   useEffect(() => {
     setTimeout(() => {
       if (!klines?.length || !klineInfo) return
