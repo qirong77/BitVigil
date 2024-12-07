@@ -9,7 +9,7 @@ import { ELECTRON_EVENT } from '../../../common/electron-event'
 
 export function SingleCoin({ coin }) {
   const klineData = useKlineData(coin)
-  const [openAlert, setOpenAlert] = useState(false)
+  const [openAlert, setOpenAlert] = useState(true)
   return (
     <div style={{ marginBottom: '20px' }}>
       <div
