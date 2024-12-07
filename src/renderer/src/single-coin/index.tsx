@@ -4,7 +4,7 @@ import { useKlineData } from './useKlineData'
 import { useState } from 'react'
 import { Spin } from 'antd'
 import { KlineTimeFilter } from './KlineTimeFilter'
-import { KlineAlalysis } from './KLineAnalysis'
+import { KlineAlalysis } from './KlineAnalysis/KLineAnalysis'
 
 export function SingleCoin({ coin }) {
   const klineData = useKlineData(coin)

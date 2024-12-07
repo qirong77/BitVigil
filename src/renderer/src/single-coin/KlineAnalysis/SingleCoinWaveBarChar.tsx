@@ -1,33 +1,16 @@
-import { LineChartOutlined } from '@ant-design/icons'
-import { Popover, Radio } from 'antd'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import * as echarts from 'echarts'
-import { I_table_row_coin_wave, tableCoinWave } from '../../../common/supabase/tableCoinWave'
-import { AYALYSIS_TIME } from '../../../common/const'
+import { useCallback, useEffect, useRef, useState } from "react"
+import { I_table_row_coin_wave, tableCoinWave } from "../../../../common/supabase/tableCoinWave"
+import * as echarts from "echarts"
+import { Radio } from "antd"
+import { AYALYSIS_TIME } from "../../../../common/const"
 
-export function KlineAlalysis({ coin }) {
-  return (
-    <Popover
-      destroyTooltipOnHide
-      placement="right"
-      content={
-        <div style={{ width: '400px' }}>
-          <SingleCoinWaveBarChar coin={coin} />
-        </div>
-      }
-    >
-      <LineChartOutlined style={{ cursor: 'pointer' }} />
-    </Popover>
-  )
-}
-
-function SingleCoinWaveBarChar({ coin }: { coin: string }) {
+export function SingleCoinWaveBarChar({ coin }: { coin: string }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const echarInstance = useRef<echarts.ECharts>()
   const [coinWaveRows, setCoinWaveRows] = useState<I_table_row_coin_wave[]>([])
   const updateEChart = useCallback((time = 15, rows: I_table_row_coin_wave[]) => {
     const row = rows.find((row) => row.time_range === time)!
-    if (!row) {
+    if (!row || !containerRef.current) {
       return
     }
     const xLabel = Object.keys(row).filter((key) => key.startsWith('c_'))

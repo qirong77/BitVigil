@@ -33,7 +33,7 @@ export function getKlineInfo(klines: I_continuous_klines[]) {
     changePercent = (max - min) / min
     type = 'up'
   }
-  const changePercentStr = (changePercent * 100).toFixed(4)
+  const changePercentStr = (changePercent * 100).toFixed(3) + '%'
   return {
     min,
     max,
