@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron'
 import { ELECTRON_EVENT } from '../../common/electron-event'
 import { fetchContinuousKlines } from '../fetch-binance/fetchContinuousKlines'
+import { electronLog } from '../electron-log'
 
 ipcMain.handle(
   ELECTRON_EVENT.GET_KLINE,
@@ -8,3 +9,7 @@ ipcMain.handle(
     return fetchContinuousKlines(coin, limit, interval, timeout)
   }
 )
+
+ipcMain.handle(ELECTRON_EVENT.ELECTRON_LOG, (_e) => {
+  return electronLog.getLogs()
+})

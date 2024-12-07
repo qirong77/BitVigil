@@ -5,7 +5,6 @@ export const MAIN_COINS = [
   'SUI',
   'BNB',
   'SOL',
-  'XRP',
   'BCH',
   '1000SHIB',
   '1000PEPE',
