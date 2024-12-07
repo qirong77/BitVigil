@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Spin } from 'antd'
 import { KlineTimeFilter } from './KlineTimeFilter'
 import { KlineAlalysis } from './KlineAnalysis/KLineAnalysis'
+import { ELECTRON_EVENT } from '../../../common/electron-event'
 
 export function SingleCoin({ coin }) {
   const klineData = useKlineData(coin)
@@ -22,9 +23,15 @@ export function SingleCoin({ coin }) {
       >
         <span>{coin}</span>
         <KlineTimeFilter updateKline={klineData.update} />
-        <KlineAlalysis coin={coin}/>
+        <KlineAlalysis coin={coin} />
         <AlertFilled
-          onClick={() => setOpenAlert(!openAlert)}
+          onClick={() => {
+            window.electron.ipcRenderer
+              .invoke(ELECTRON_EVENT.CHANGE_NOTIFICATION_STATUS, coin, !openAlert)
+              .then((res) => {
+                res && setOpenAlert(!openAlert)
+              })
+          }}
           style={{ cursor: 'pointer', color: openAlert ? 'red' : '' }}
         />
         <ReloadOutlined onClick={() => klineData.update()} style={{ cursor: 'pointer' }} />
@@ -37,7 +44,11 @@ export function SingleCoin({ coin }) {
           justifyContent: 'center'
         }}
       >
-        <LineChar updateKlineMethod={klineData.update} klines={klineData.klines} klineInfo={klineData.klineInfo!} />
+        <LineChar
+          updateKlineMethod={klineData.update}
+          klines={klineData.klines}
+          klineInfo={klineData.klineInfo!}
+        />
       </div>
     </div>
   )

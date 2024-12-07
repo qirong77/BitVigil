@@ -3,6 +3,7 @@ import { tableCoinWave } from '../../common/supabase/tableCoinWave'
 import { logBigChange } from '../../common/supabase/tableLog'
 import { electronLog } from '../electron-log'
 import { fetchContinuousKlines } from '../fetch-binance/fetchContinuousKlines'
+import { notify } from '../notification'
 
 export async function runAutoUpdateTask() {
   electronLog.log('开始更新-runAutoUpdateTask')
@@ -10,7 +11,7 @@ export async function runAutoUpdateTask() {
     try {
       const klines = await fetchContinuousKlines(coin, 600, 1, 1000 * 20)
       await tableCoinWave.updateTableRowCoinWave(coin, klines)
-      logBigChange(coin, klines)
+      logBigChange(coin, klines, notify)
     } catch (error) {
       // @ts-ignore
       electronLog.log(coin + 'runTask出错！！！', error)

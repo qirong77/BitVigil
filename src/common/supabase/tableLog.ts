@@ -17,20 +17,23 @@ export function supabaseTableLog(title: string, content = '') {
     })
 }
 
-export function logBigChange(coin, klines) {
+export function logBigChange(coin, klines, notifyFn) {
   const changePercent15 = getKlineInfo(klines.slice(-15))?.changePercentNumber
   const chaneOf30 = getKlineInfo(klines.slice(-30))?.changePercentNumber
   const changeOf60 = getKlineInfo(klines.slice(-60))?.changePercentNumber
   if (changePercent15 && changePercent15 > 0.015) {
     const log = coin + '_15_' + (changePercent15 * 100).toFixed(2) + '%'
+    notifyFn('Warning', log, coin)
     supabaseTableLog(log)
   }
   if (chaneOf30 && chaneOf30 > 0.02) {
     const log = coin + '_30_' + (chaneOf30 * 100).toFixed(2) + '%'
+    notifyFn('Warning', log, coin)
     supabaseTableLog(log)
   }
   if (changeOf60 && changeOf60 > 0.028) {
     const log = coin + '_60_' + (changeOf60 * 100).toFixed(2) + '%'
+    notifyFn('Warning', log, coin)
     supabaseTableLog(log)
   }
 }
