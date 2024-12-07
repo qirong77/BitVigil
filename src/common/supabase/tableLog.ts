@@ -26,12 +26,12 @@ export function logBigChange(coin, klines, notifyFn) {
     notifyFn('Warning', log, coin)
     supabaseTableLog(log)
   }
-  if (chaneOf30 && chaneOf30 > 0.02) {
+  if (chaneOf30 && chaneOf30 > 0.022) {
     const log = coin + '_30_' + (chaneOf30 * 100).toFixed(2) + '%'
     notifyFn('Warning', log, coin)
     supabaseTableLog(log)
   }
-  if (changeOf60 && changeOf60 > 0.028) {
+  if (changeOf60 && changeOf60 > 0.03) {
     const log = coin + '_60_' + (changeOf60 * 100).toFixed(2) + '%'
     notifyFn('Warning', log, coin)
     supabaseTableLog(log)

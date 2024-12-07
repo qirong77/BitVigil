@@ -18,5 +18,5 @@ export async function runAutoUpdateTask() {
     }
   }
   electronLog.log('更新完成-runAutoUpdateTask')
-  setTimeout(runAutoUpdateTask, 1000 * 60 * 3)
+  setTimeout(runAutoUpdateTask, 1000 * 60 * 1.5)
 }
