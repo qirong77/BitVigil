@@ -7,12 +7,15 @@ import { KlineTimeFilter } from './KlineTimeFilter'
 import { KlineAlalysis } from './KlineAnalysis/KLineAnalysis'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
 
-export function SingleCoin({ coin }) {
+export function SingleCoin({ coin, openAlertAll }) {
   const klineData = useKlineData(coin)
-  const [openAlert, setOpenAlert] = useState(true)
+  const [openAlert, setOpenAlert] = useState(openAlertAll)
   useEffect(() => {
     window.electron.ipcRenderer.invoke(ELECTRON_EVENT.CHANGE_NOTIFICATION_STATUS, coin, openAlert)
   }, [openAlert])
+  useEffect(() => {
+    setOpenAlert(openAlertAll)
+  }, [openAlertAll])
   return (
     <div style={{ marginBottom: '20px' }}>
       <div

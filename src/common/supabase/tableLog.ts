@@ -17,21 +17,31 @@ export function supabaseTableLog(title: string, content = '') {
     })
 }
 
+export function getLog() {
+  return supabase
+    .from('log')
+    .select('*')
+    .order('time', { ascending: false })
+}
+
+export const tableLog = {
+  getLog
+}
 export function logBigChange(coin, klines, notifyFn) {
   const changePercent15 = getKlineInfo(klines.slice(-15))?.changePercentNumber
   const chaneOf30 = getKlineInfo(klines.slice(-30))?.changePercentNumber
   const changeOf60 = getKlineInfo(klines.slice(-60))?.changePercentNumber
-  if (changePercent15 && changePercent15 > 0.015) {
+  if (changePercent15 && changePercent15 > 0.017) {
     const log = coin + '_15_' + (changePercent15 * 100).toFixed(2) + '%'
     notifyFn('Warning', log, coin)
     supabaseTableLog(log)
   }
-  if (chaneOf30 && chaneOf30 > 0.022) {
+  if (chaneOf30 && chaneOf30 > 0.023) {
     const log = coin + '_30_' + (chaneOf30 * 100).toFixed(2) + '%'
     notifyFn('Warning', log, coin)
     supabaseTableLog(log)
   }
-  if (changeOf60 && changeOf60 > 0.03) {
+  if (changeOf60 && changeOf60 > 0.029) {
     const log = coin + '_60_' + (changeOf60 * 100).toFixed(2) + '%'
     notifyFn('Warning', log, coin)
     supabaseTableLog(log)
