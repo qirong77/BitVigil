@@ -9,10 +9,18 @@ export function chaneCoinAlertStatus(coin: string, status: boolean) {
   }
   return true
 }
-export function notify(title: string, body: string,coin: string) {
+export function notifyCoin(title: string, body: string,coin: string) {
   if (!_openAlertSet.has(coin)) {
     return
   }
+  const notification = new Notification({
+    title,
+    body
+  })
+  notification.show()
+}
+
+export function notifyCommon(title: string, body: string) {
   const notification = new Notification({
     title,
     body

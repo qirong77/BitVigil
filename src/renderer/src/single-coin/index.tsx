@@ -6,6 +6,7 @@ import { Spin } from 'antd'
 import { KlineTimeFilter } from './KlineTimeFilter'
 import { KlineAlalysis } from './KlineAnalysis/KLineAnalysis'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
+import { CoinTabEmitter } from '../tabs/CoinTab'
 
 export function SingleCoin({ coin, openAlertAll }) {
   const klineData = useKlineData(coin)
@@ -16,6 +17,11 @@ export function SingleCoin({ coin, openAlertAll }) {
   useEffect(() => {
     setOpenAlert(openAlertAll)
   }, [openAlertAll])
+  useEffect(() => {
+    const fn = () => klineData.update(600, 1, true)
+    CoinTabEmitter.on('refresh', fn)
+    return () => CoinTabEmitter.off('refresh', fn)
+  }, [klineData.update])
   return (
     <div style={{ marginBottom: '20px' }}>
       <div
