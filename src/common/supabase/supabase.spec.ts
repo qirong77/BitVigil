@@ -3,6 +3,7 @@ import { tableCoinWave } from './tableCoinWave'
 // @ts-ignore
 import { fetchContinuousKlines } from '../../main/fetch-binance/fetchContinuousKlines'
 import { supabaseTableLog } from './tableLog'
+import { tableChore } from './tableChore'
 describe('supabase', () => {
   it(
     'supabase',
@@ -29,5 +30,13 @@ describe('supabase', () => {
   it('supabaseTableLog', async () => {
     const data = await supabaseTableLog('test', 'test')
     expect(data?.status === 201).toBeTruthy()
+  })
+  it('tableChore', async () => {
+    const res = await tableChore.getNodes()
+    const text = res.data?.[0].value
+    expect(text).toBeDefined()
+    const resNew = await tableChore.saveNote('value')
+    console.log(resNew)
+    expect(resNew?.status === 204).toBeTruthy()
   })
 })

@@ -6,10 +6,11 @@ function getNodes() {
 function saveNote(note: string) {
   return supabase
     .from('chore')
-    .update({ note })
+    .update({ value: note })
     .eq('id', 'notebook')
     .then((res) => {
       console.log('更新Note', res)
+      return res
     })
 }
 export const tableChore = {
