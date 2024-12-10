@@ -21,7 +21,17 @@ CREATE TABLE public.coin_wave (
   c_80_85 NUMERIC DEFAULT 0,
   c_85_90 NUMERIC DEFAULT 0,
   c_90_95 NUMERIC DEFAULT 0,
-  c_95_100 NUMERIC DEFAULT 0
+  c_95_100 NUMERIC DEFAULT 0,
+  c_100_110 NUMERIC DEFAULT 0,
+  c_110_120 NUMERIC DEFAULT 0,
+  c_120_130 NUMERIC DEFAULT 0,
+  c_130_140 NUMERIC DEFAULT 0,
+  c_140_150 NUMERIC DEFAULT 0,
+  c_150_160 NUMERIC DEFAULT 0,
+  c_160_170 NUMERIC DEFAULT 0,
+  c_170_180 NUMERIC DEFAULT 0,
+  c_180_190 NUMERIC DEFAULT 0,
+  c_190_200 NUMERIC DEFAULT 0
 ) TABLESPACE pg_default;
  */
 
@@ -29,7 +39,7 @@ import { supabase } from '.'
 import { AYALYSIS_TIME } from '../const'
 import { getKlineInfo } from '../kline/getKlineInfo'
 import { I_continuous_klines } from '../types'
-
+const TABLE_NAME = 'coin_wave_new'
 export interface I_table_row_coin_wave {
   id: string
   coin_id: string
@@ -53,12 +63,22 @@ export interface I_table_row_coin_wave {
   c_85_90: number
   c_90_95: number
   c_95_100: number
+  c_100_110: number
+  c_110_120: number
+  c_120_130: number
+  c_130_140: number
+  c_140_150: number
+  c_150_160: number
+  c_160_170: number
+  c_170_180: number
+  c_180_190: number
+  c_190_200: number
 }
 
 function getTableRowCoinWave(coin: string) {
   return new Promise<I_table_row_coin_wave[]>((resolve, reject) => {
     supabase
-      .from('coin_wave')
+      .from(TABLE_NAME)
       .select('*')
       .eq('coin_id', coin)
       .then((res) => {
@@ -93,11 +113,21 @@ function getTableRowCoinWave(coin: string) {
             c_80_85: 0,
             c_85_90: 0,
             c_90_95: 0,
-            c_95_100: 0
+            c_95_100: 0,
+            c_100_110: 0,
+            c_110_120: 0,
+            c_120_130: 0,
+            c_130_140: 0,
+            c_140_150: 0,
+            c_150_160: 0,
+            c_160_170: 0,
+            c_170_180: 0,
+            c_180_190: 0,
+            c_190_200: 0
           }
         })
         supabase
-          .from('coin_wave')
+          .from(TABLE_NAME)
           .insert(rows)
           .then((res) => {
             if (res.status === 201) {
@@ -120,7 +150,7 @@ async function updateTableRowCoinWave(coin: string, klines: I_continuous_klines[
     const changePercentNumber = changeInfo?.changePercentNumber || 0
     return setRowValue(row, changePercentNumber)
   })
-  const res = await supabase.from('coin_wave').upsert(newRows)
+  const res = await supabase.from(TABLE_NAME).upsert(newRows)
   return {
     res,
     newRows
@@ -199,7 +229,50 @@ async function updateTableRowCoinWave(coin: string, klines: I_continuous_klines[
       row.c_90_95 = row.c_90_95 + 1
       return row
     }
-    row.c_95_100 = row.c_95_100 + 1
+    if (value > 9.5 && value <= 10) {
+      row.c_95_100 = row.c_95_100 + 1
+      return row
+    }
+    if (value > 10 && value <= 11) {
+      row.c_100_110 = row.c_100_110 + 1
+      return row
+    }
+    if (value > 11 && value <= 12) {
+      row.c_110_120 = row.c_110_120 + 1
+      return row
+    }
+    if (value > 12 && value <= 13) {
+      row.c_120_130 = row.c_120_130 + 1
+      return row
+    }
+    if (value > 13 && value <= 14) {
+      row.c_130_140 = row.c_130_140 + 1
+      return row
+    }
+    if (value > 14 && value <= 15) {
+      row.c_140_150 = row.c_140_150 + 1
+      return row
+    }
+    if (value > 15 && value <= 16) {
+      row.c_150_160 = row.c_150_160 + 1
+      return row
+    }
+    if (value > 16 && value <= 17) {
+      row.c_160_170 = row.c_160_170 + 1
+      return row
+    }
+    if (value > 17 && value <= 18) {
+      row.c_170_180 = row.c_170_180 + 1
+      return row
+    }
+    if (value > 18 && value <= 19) {
+      row.c_180_190 = row.c_180_190 + 1
+      return row
+    }
+    if (value > 19 && value <= 20) {
+      row.c_190_200 = row.c_190_200 + 1
+      return row
+    }
     return row
   }
 }

@@ -4,6 +4,7 @@ import { tableCoinWave } from './tableCoinWave'
 import { fetchContinuousKlines } from '../../main/fetch-binance/fetchContinuousKlines'
 import { supabaseTableLog } from './tableLog'
 import { tableChore } from './tableChore'
+import { tableCoinAlertSetting } from './tableCoinAlertSetting'
 describe('supabase', () => {
   it(
     'supabase',
@@ -21,6 +22,7 @@ describe('supabase', () => {
     async () => {
       const klines = await fetchContinuousKlines('SUI', 600, 1)
       const data = await tableCoinWave.updateTableRowCoinWave('SUI', klines)
+      console.log(data)
       expect(data?.res?.status === 200).toBeTruthy()
     },
     {
@@ -38,5 +40,25 @@ describe('supabase', () => {
     const resNew = await tableChore.saveNote('value')
     console.log(resNew)
     expect(resNew?.status === 204).toBeTruthy()
+  }),
+  it('tableCoinAlertSetting', async () => {
+    const res = await tableCoinAlertSetting.getCoinAlertSetting('BTC')
+    console.log(res)
+    expect(res.id === 'BTC').toBeTruthy()
+    const newRow = {
+      id: 'BTC',
+      15: 0,
+      30: 0,
+      60: 0,
+      120: 0,
+      240: 0,
+      360: 0,
+      480: 0,
+      600: 1
+    }
+    const resNew = await tableCoinAlertSetting.setCoinAlertSetting('BTC', newRow)
+    expect(resNew?.status === 204).toBeTruthy()
+    const newRowFromDB = await tableCoinAlertSetting.getCoinAlertSetting('BTC')
+    expect(newRowFromDB[600] === 1).toBeTruthy()
   })
 })
