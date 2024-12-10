@@ -12,7 +12,11 @@ export function CoinWaveTable({ coin }) {
       setKlines(res)
     })
   }, [])
-  if(!klines.length) return null
+  if (!klines.length) return null
+  const tableRow = {}
+  AYALYSIS_TIME.forEach((time) => {
+    tableRow[time] = getKlineInfo(klines.slice(-time))?.changePercentStr
+  })
   return (
     <Table
       pagination={false}
@@ -20,15 +24,7 @@ export function CoinWaveTable({ coin }) {
       bordered
       rowKey={(record) => record[15]!}
       columns={AYALYSIS_TIME.map((time) => ({ title: time + 'min', dataIndex: time }))}
-      dataSource={[
-        {
-          15: getKlineInfo(klines.slice(-15))?.changePercentStr,
-          30: getKlineInfo(klines.slice(-30))?.changePercentStr,
-          60: getKlineInfo(klines.slice(-60))?.changePercentStr,
-          120: getKlineInfo(klines.slice(-120))?.changePercentStr,
-          240: getKlineInfo(klines.slice(-240))?.changePercentStr
-        }
-      ]}
+      dataSource={[tableRow]}
     />
   )
 }

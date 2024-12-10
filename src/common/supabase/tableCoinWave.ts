@@ -39,6 +39,7 @@ import { supabase } from '.'
 import { AYALYSIS_TIME } from '../const'
 import { getKlineInfo } from '../kline/getKlineInfo'
 import { I_continuous_klines } from '../types'
+import { tableLog } from './tableLog'
 const TABLE_NAME = 'coin_wave_new'
 export interface I_table_row_coin_wave {
   id: string
@@ -273,6 +274,11 @@ async function updateTableRowCoinWave(coin: string, klines: I_continuous_klines[
       row.c_190_200 = row.c_190_200 + 1
       return row
     }
+    tableLog.addLog('updateTableRowCoinWave更新可能出现问题',JSON.stringify({
+      coin,
+      row,
+      value,
+    }))
     return row
   }
 }

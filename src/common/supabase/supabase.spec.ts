@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { tableCoinWave } from './tableCoinWave'
 // @ts-ignore
 import { fetchContinuousKlines } from '../../main/fetch-binance/fetchContinuousKlines'
-import { supabaseTableLog } from './tableLog'
 import { tableChore } from './tableChore'
 import { tableCoinAlertSetting } from './tableCoinAlertSetting'
+import { tableLog } from './tableLog'
 describe('supabase', () => {
   it(
     'supabase',
@@ -30,7 +30,7 @@ describe('supabase', () => {
     }
   ),
   it('supabaseTableLog', async () => {
-    const data = await supabaseTableLog('test', 'test')
+    const data = await tableLog.addLog('test', 'test')
     expect(data?.status === 201).toBeTruthy()
   })
   it('tableChore', async () => {
