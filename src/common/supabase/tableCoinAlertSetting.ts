@@ -29,14 +29,14 @@ function getCoinAlertSetting(coin: string) {
         }
         const newRow = {
           id: coin,
-          15: 0,
-          30: 0,
-          60: 0,
-          120: 0,
-          240: 0,
-          360: 0,
-          480: 0,
-          600: 0
+          15: 10,
+          30: 10,
+          60: 10,
+          120: 10,
+          240: 10,
+          360: 10,
+          480: 10,
+          600: 10
         }
         supabase
           .from(TABLE_NAME)
