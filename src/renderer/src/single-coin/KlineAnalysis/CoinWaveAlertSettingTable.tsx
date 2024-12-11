@@ -9,7 +9,7 @@ import {
 export function CoinWaveAlertSettingTable({ coin }) {
   const [row, setRow] = useState<I_coin_alert_setting>()
   const [isLoading, setIsLoading] = useState(false)
-  const newChangeValueRef = useRef(0)
+  const newChangeValueRef = useRef<number>()
   useEffect(() => {
     tableCoinAlertSetting.getCoinAlertSetting(coin).then((res) => {
       setRow(res)
@@ -38,6 +38,10 @@ export function CoinWaveAlertSettingTable({ coin }) {
                 formatter={(value) => `${value}%`}
                 value={value}
                 onBlur={() => {
+                  if(typeof newChangeValueRef.current !== 'number') {
+                    message.info('无变化，不更新')
+                    return
+                  }
                   setIsLoading(true)
                   tableCoinAlertSetting
                     // @ts-ignore
