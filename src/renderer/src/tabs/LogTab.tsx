@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
-import { Table } from 'antd'
+import { Button, Divider, Table } from 'antd'
 import { tableLog } from '../../../common/supabase/tableLog'
 interface I_log {
   id: string
@@ -24,6 +24,19 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
   }, [isActiveTab])
   return (
     <div>
+      <Divider />
+      <Button
+        onClick={() => {
+          tableLog.clearLog().then((res) => {
+            if (res.status === 204) {
+              update()
+            }
+          })
+        }}
+      >
+        清除日志
+      </Button>
+      <Divider />
       <Table
         bordered
         size="small"
@@ -41,6 +54,8 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
         ]}
         dataSource={changeLogs}
       />
+      <Divider />
+
       <Table
         bordered
         size="small"
