@@ -1,5 +1,5 @@
 import { InputNumber, message, Table } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AYALYSIS_TIME } from '../../../../common/const'
 import {
   I_coin_alert_setting,
@@ -9,6 +9,7 @@ import {
 export function CoinWaveAlertSettingTable({ coin }) {
   const [row, setRow] = useState<I_coin_alert_setting>()
   const [isLoading, setIsLoading] = useState(false)
+  const newChangeValueRef = useRef(0)
   useEffect(() => {
     tableCoinAlertSetting.getCoinAlertSetting(coin).then((res) => {
       setRow(res)
@@ -36,13 +37,13 @@ export function CoinWaveAlertSettingTable({ coin }) {
                 style={{ width: '80px' }}
                 formatter={(value) => `${value}%`}
                 value={value}
-                onChange={(newValue) => {
+                onBlur={() => {
                   setIsLoading(true)
                   tableCoinAlertSetting
                     // @ts-ignore
                     .setCoinAlertSetting(coin, {
                       ...record,
-                      [time]: newValue
+                      [time]: newChangeValueRef.current
                     })
                     .then((res) => {
                       if (res.status === 204) {
@@ -56,6 +57,9 @@ export function CoinWaveAlertSettingTable({ coin }) {
                         setIsLoading(false)
                       }
                     })
+                }}
+                onChange={(value) => {
+                  newChangeValueRef.current = value
                 }}
               />
             )
