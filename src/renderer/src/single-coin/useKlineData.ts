@@ -22,7 +22,7 @@ export function useKlineData(coin: string) {
         }
         // 失败的概率比较大，所以在 10 秒内重试
         setTimeout(() => update(limit, interval, immediate), 1000 * 10)
-        throw new Error('获取k线数据失败')
+        throw new Error('获取k线数据失败'+ res)
       })
       .finally(() => setIsLoading(false))
   }, [])

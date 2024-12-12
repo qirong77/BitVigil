@@ -19,7 +19,9 @@ export function notifyCoin(title: string, body: string,coin: string) {
   })
   notification.show()
 }
-
+export function isCoinOpenAlert(coin: string) {
+  return _openAlertSet.has(coin)
+}
 export function notifyCommon(title: string, body: string) {
   const notification = new Notification({
     title,
