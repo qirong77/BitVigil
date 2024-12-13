@@ -60,8 +60,8 @@ export function LineChar({
           splitLine: {
             show: false
           },
-          min: klineInfo.min,
-          max: klineInfo.max
+          min: klineInfo.min * 0.988,
+          max: klineInfo.max * 1.012
         },
         series: [
           {
