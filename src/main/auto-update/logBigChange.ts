@@ -28,7 +28,7 @@ function logBigChangeFn(coin, klines, notifyFn) {
   AYALYSIS_TIME.forEach((time) => {
     const klineInfo = getKlineInfo(klines.slice(-time))
     if (klineInfo!.changePercentNumber > alertSetting[time] / 100) {
-      const log = coin + '_' + time + '_' + klineInfo?.changePercentStr
+      const log = 'deviceM1pro：' + coin + '_' + time + '_' + klineInfo?.changePercentStr
       notifyFn('Warning', log, coin)
       tableLog.addLog(log)
     }
