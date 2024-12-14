@@ -25,14 +25,17 @@ function logBigChangeFn(coin, klines, notifyFn) {
   if (!alertSetting) {
     return
   }
+  let alertText = ''
   AYALYSIS_TIME.forEach((time) => {
     const klineInfo = getKlineInfo(klines.slice(-time))
     if (klineInfo!.changePercentNumber > alertSetting[time] / 100) {
-      const log = 'deviceM1pro：' + coin + '_' + time + '_' + klineInfo?.changePercentStr
-      notifyFn('Warning', log, coin)
-      tableLog.addLog(log)
+      alertText += `${coin} - ${time}minute - ${klineInfo!.changePercentStr}\n`
     }
   })
+  if(alertText) {
+    notifyFn('Coin Alert - ' + coin,'deviceM1pro：'+ alertText, coin)
+    tableLog.addLog('deviceM1pro：'+ alertText)
+  }
 }
 
 export const logBigChange = {
