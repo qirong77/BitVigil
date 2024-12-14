@@ -36,8 +36,8 @@ export function LineChar({
         animation: false,
         grid: {
           top: '3%',
-          left: '0%',
-          right: '2%',
+          left: '3%',
+          right: '3%',
           bottom: '0%',
           containLabel: true
         },
@@ -49,6 +49,9 @@ export function LineChar({
         },
         xAxis: {
           type: 'category',
+          axisLabel: {
+            margin: 20
+          },
           axisTick: {
             alignWithLabel: true
           },
@@ -60,8 +63,8 @@ export function LineChar({
           splitLine: {
             show: false
           },
-          min: klineInfo.min * 0.988,
-          max: klineInfo.max * 1.012
+          min: prettierNumber(klineInfo.min * 0.988),
+          max: prettierNumber(klineInfo.max * 1.012)
         },
         series: [
           {
@@ -78,4 +81,29 @@ export function LineChar({
     }, 250)
   }, [klines])
   return <div style={{ width: '100%', height: '250px' }} ref={containerRef}></div>
+}
+
+function prettierNumber(n: number) {
+  if(n > 100) {
+    return n.toFixed(0)
+  }
+  if(n > 100) {
+    return n.toFixed(1)
+  }
+  if(n > 1) {
+    return n.toFixed(2)
+  }
+  if(n > 0.1) {
+    return n.toFixed(3)
+  }
+  if(n > 0.01) {
+    return n.toFixed(4)
+  }
+  if(n > 0.001) {
+    return n.toFixed(5)
+  }
+  if(n > 0.0001) {
+    return n.toFixed(6)
+  }
+  return n
 }
