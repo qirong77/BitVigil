@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
-import { Button, Divider, Table } from 'antd'
+import { Button, Divider, Select, Table } from 'antd'
 import { tableLog } from '../../../common/supabase/tableLog'
+import { MAIN_COINS } from '../../../common/coins/MAIN_COINS'
 interface I_log {
   id: string
   time: number
@@ -12,6 +13,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
   const [mainLogs, setMainLogs] = useState<I_log[]>([])
   const [changeLogs, setChangeLogs] = useState<I_log[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [selectCoins, setSelectCoins] = useState<string[]>([])
   const update = () => {
     setIsLoading(true)
     window.electron.ipcRenderer.invoke(ELECTRON_EVENT.ELECTRON_LOG).then((value) => {
@@ -30,7 +32,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
       <Divider />
       <div style={{ display: 'flex', gap: '10px' }}>
         <Button
-        loading={isLoading}
+          loading={isLoading}
           onClick={() => {
             setIsLoading(true)
             tableLog.clearLog().then((res) => {
@@ -51,6 +53,15 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
         >
           刷新
         </Button>
+        <Select
+        allowClear
+        style={{ width: 240 }}
+        maxTagCount={2}
+          mode="multiple"
+          value={selectCoins}
+          onChange={setSelectCoins}
+          options={MAIN_COINS.map((item) => ({ label: item, value: item }))}
+        />
       </div>
       <Divider />
       <Table
@@ -69,7 +80,10 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           { title: '标题', dataIndex: 'title' },
           { title: '内容', dataIndex: 'content' }
         ]}
-        dataSource={changeLogs}
+        dataSource={changeLogs.filter((item) => {
+          if(!selectCoins.length) return true
+          return selectCoins.find((coin) => item.title.includes(coin))
+        })}
       />
       <Divider />
 
