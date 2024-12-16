@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
-import { Button, Divider, Select, Table } from 'antd'
-import { tableLog } from '../../../common/supabase/tableLog'
+import { Button, Divider, message, Select, Table } from 'antd'
+import { I_log, tableLog } from '../../../common/supabase/tableLog'
 import { MAIN_COINS } from '../../../common/coins/MAIN_COINS'
-interface I_log {
+interface I_log_main {
   id: string
   time: number
   title: string
   content?: string
 }
 export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
-  const [mainLogs, setMainLogs] = useState<I_log[]>([])
+  const [mainLogs, setMainLogs] = useState<I_log_main[]>([])
   const [changeLogs, setChangeLogs] = useState<I_log[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [selectCoins, setSelectCoins] = useState<string[]>([])
@@ -54,9 +54,9 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           刷新
         </Button>
         <Select
-        allowClear
-        style={{ width: 240 }}
-        maxTagCount={2}
+          allowClear
+          style={{ width: 240 }}
+          maxTagCount={2}
           mode="multiple"
           value={selectCoins}
           onChange={setSelectCoins}
@@ -80,11 +80,41 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           },
           { title: 'coin', dataIndex: 'coin', width: 150 },
           { title: 'level', dataIndex: 'level' },
-          { title: '内容', dataIndex: 'content' }
+          {
+            title: '内容',
+            dataIndex: 'content',
+            render(value, record, index) {
+              return <div style={{ color: record.validate ? 'red' : 'inherit' }}>{value}</div>
+            }
+          },
+          {
+            title: '操作',
+            render(value, record, index) {
+              return (
+                <>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      const newRow = { ...record, validate: record.validate ? 0 : 1 }
+                      tableLog.updateLog(newRow).then((res) => {
+                        if(res.status === 204) {
+                          update()
+                        } else {
+                          message.error('更新失败')
+                        }
+                      })
+                    }}
+                  >
+                    {record.validate ? '标记为无效' : '标记为有效'}{' '}
+                  </Button>
+                </>
+              )
+            }
+          }
         ]}
         dataSource={changeLogs.filter((item) => {
-          if(!selectCoins.length) return true
-          return selectCoins.find((coin) => item.title.includes(coin))
+          if (!selectCoins.length) return true
+          return selectCoins.find((coin) => item.coin === coin)
         })}
       />
       <Divider />
