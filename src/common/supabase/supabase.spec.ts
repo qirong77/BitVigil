@@ -30,7 +30,7 @@ describe('supabase', () => {
     }
   ),
   it('supabaseTableLog', async () => {
-    const data = await tableLog.addLog('test', 'test')
+    const data = await tableLog.addLog('BTC', 1, 'test')
     expect(data?.status === 201).toBeTruthy()
   })
   it('tableChore', async () => {

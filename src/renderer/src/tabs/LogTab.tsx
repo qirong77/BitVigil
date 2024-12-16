@@ -20,7 +20,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
       setMainLogs(value)
     })
     tableLog.getLog().then((res) => {
-      setChangeLogs(res.data!.filter((item) => item.title.startsWith('deviceM1pro：')))
+      setChangeLogs(res.data!)
       setIsLoading(false)
     })
   }
@@ -73,11 +73,13 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           {
             title: '时间',
             dataIndex: 'time',
+            width: 150,
             render(value, record, index) {
               return new Date(value).toLocaleString()
             }
           },
-          { title: '标题', dataIndex: 'title' },
+          { title: 'coin', dataIndex: 'coin', width: 150 },
+          { title: 'level', dataIndex: 'level' },
           { title: '内容', dataIndex: 'content' }
         ]}
         dataSource={changeLogs.filter((item) => {

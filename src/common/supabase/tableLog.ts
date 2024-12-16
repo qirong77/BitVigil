@@ -2,13 +2,14 @@ import { supabase } from './index'
 export interface I_log {
   id: string
   time: number
-  title: string
-  content?: string
+  coin: string
+  level: number
+  content: string
 }
-export function addLog(title: string, content = '') {
+export function addLog(coin: string, alertLevel = 1, content = '') {
   return supabase
     .from('log')
-    .insert({ time: Date.now(), title, content })
+    .insert({ time: Date.now(), coin, level: alertLevel, content })
     .then((res) => {
       if (res.status !== 201) {
         console.log('supabaseTableLog-ERROR', res)
