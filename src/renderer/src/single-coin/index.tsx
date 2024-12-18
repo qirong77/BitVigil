@@ -16,6 +16,10 @@ export function SingleCoin({ coin, openAlertAll }) {
   }, [openAlert])
   useEffect(() => {
     setOpenAlert(openAlertAll)
+    const timer = setTimeout(() => {
+      setOpenAlert(true)
+    },1000 * 60 * 30)
+    return () => clearTimeout(timer)
   }, [openAlertAll])
   useEffect(() => {
     const fn = () => klineData.update(600, 1, true)
