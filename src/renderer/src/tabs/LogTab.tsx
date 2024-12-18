@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
-import { Button, Divider, message, Select, Table } from 'antd'
+import { Button, Checkbox, Divider, message, Select, Table } from 'antd'
 import { I_log, tableLog } from '../../../common/supabase/tableLog'
 import { MAIN_COINS } from '../../../common/coins/MAIN_COINS'
 interface I_log_main {
@@ -13,7 +13,11 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
   const [mainLogs, setMainLogs] = useState<I_log_main[]>([])
   const [changeLogs, setChangeLogs] = useState<I_log[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [selectCoins, setSelectCoins] = useState<string[]>([])
+  const [filterCodition, setfilterCodition] = useState({
+    selectCoins:[] as string[],
+    onlyshowValid: false,
+    onlyshowInvalid: false
+  })
   const update = () => {
     setIsLoading(true)
     window.electron.ipcRenderer.invoke(ELECTRON_EVENT.ELECTRON_LOG).then((value) => {
@@ -24,13 +28,25 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
       setIsLoading(false)
     })
   }
+  const getFinalShowChangeLogs = () => {
+    return changeLogs.filter((item) => {
+      if(filterCodition.selectCoins.length && !filterCodition.selectCoins.includes(item.coin)) return false
+      if (filterCodition.onlyshowValid) {
+        return item.validate === 1
+      }
+      if (filterCodition.onlyshowInvalid) {
+        return item.validate === 0
+      }
+      return true
+    })
+  }
   useEffect(() => {
     isActiveTab && update()
   }, [isActiveTab])
   return (
     <div>
       <Divider />
-      <div style={{ display: 'flex', gap: '10px' }}>
+      <div style={{ display: 'flex', gap: '10px',alignItems:'center' }}>
         <Button
           loading={isLoading}
           onClick={() => {
@@ -58,10 +74,17 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           style={{ width: 240 }}
           maxTagCount={2}
           mode="multiple"
-          value={selectCoins}
-          onChange={setSelectCoins}
+          value={filterCodition.selectCoins}
+          onChange={(selectCoins) => {
+            setfilterCodition({
+              ...filterCodition,
+              selectCoins,
+            })
+          }}
           options={MAIN_COINS.map((item) => ({ label: item, value: item }))}
         />
+        <Checkbox checked={filterCodition.onlyshowValid} onChange={(e) => setfilterCodition({ ...filterCodition, onlyshowValid: e.target.checked })}>仅显示标记为有效</Checkbox>
+        <Checkbox checked={filterCodition.onlyshowInvalid} onChange={(e) => setfilterCodition({ ...filterCodition, onlyshowInvalid: e.target.checked })}>仅显示标记为无效</Checkbox>
       </div>
       <Divider />
       <Table
@@ -126,10 +149,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
             }
           }
         ]}
-        dataSource={changeLogs.filter((item) => {
-          if (!selectCoins.length) return true
-          return selectCoins.find((coin) => item.coin === coin)
-        })}
+        dataSource={getFinalShowChangeLogs()}
       />
       <Divider />
 
