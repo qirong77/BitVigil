@@ -97,7 +97,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
                     onClick={() => {
                       const newRow = { ...record, validate: record.validate ? 0 : 1 }
                       tableLog.updateLog(newRow).then((res) => {
-                        if(res.status === 204) {
+                        if (res.status === 204) {
                           update()
                         } else {
                           message.error('更新失败')
@@ -106,6 +106,20 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
                     }}
                   >
                     {record.validate ? '标记为无效' : '标记为有效'}{' '}
+                  </Button>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      tableLog.deleteLog(record).then((res) => {
+                        if (res.status === 204) {
+                          update()
+                        } else {
+                          message.error('删除失败')
+                        }
+                      })
+                    }}
+                  >
+                    删除
                   </Button>
                 </>
               )

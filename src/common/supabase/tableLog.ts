@@ -28,9 +28,13 @@ export function clearLog() {
 export function updateLog(row: I_log) {
   return supabase.from('log').update(row).eq('id', row.id)
 }
+export function deleteLog(row: I_log) {
+  return supabase.from('log').delete().eq('id', row.id)
+}
 export const tableLog = {
   getLog,
   addLog,
   clearLog,
-  updateLog
+  updateLog,
+  deleteLog
 }
