@@ -10,16 +10,21 @@ export function CoinTab() {
   return (
     <div>
       <Divider />
-      <div style={{ display: 'flex',alignItems:'center',gap:'20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <span style={{ display: 'flex' }}>
-          <span>🔔：</span>
-          <Switch value={openAlert} onChange={setOpenAlert} />
+          <Button onClick={() => setOpenAlert(true)}>开启提醒</Button>
+        </span>
+        <span style={{ display: 'flex' }}>
+          <Button onClick={() => setOpenAlert(false)}>关闭提醒</Button>
         </span>
         <Button onClick={() => CoinTabEmitter.emit('refresh')}>刷新</Button>
-        <Button onClick={() => {
-          window.electron.ipcRenderer.invoke(ELECTRON_EVENT.NOTIFICATION,'test','test')
-        }}>提醒</Button>
-
+        <Button
+          onClick={() => {
+            window.electron.ipcRenderer.invoke(ELECTRON_EVENT.NOTIFICATION, 'test', 'test')
+          }}
+        >
+          提醒
+        </Button>
       </div>
       <Divider />
       {MAIN_COINS.map((item) => (

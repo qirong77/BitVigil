@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
-import { Button, Checkbox, Divider, message, Select, Table } from 'antd'
+import { Button, Checkbox, DatePicker, Divider, message, Select, Table } from 'antd'
 import { I_log, tableLog } from '../../../common/supabase/tableLog'
 import { MAIN_COINS } from '../../../common/coins/MAIN_COINS'
 interface I_log_main {
@@ -16,7 +16,9 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
   const [filterCodition, setfilterCodition] = useState({
     selectCoins:[] as string[],
     onlyshowValid: false,
-    onlyshowInvalid: false
+    onlyshowInvalid: false,
+    startTime: 0,
+    endTime: 0
   })
   const update = () => {
     setIsLoading(true)
@@ -31,6 +33,16 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
   const getFinalShowChangeLogs = () => {
     return changeLogs.filter((item) => {
       if(filterCodition.selectCoins.length && !filterCodition.selectCoins.includes(item.coin)) return false
+      if(filterCodition.startTime && filterCodition.endTime) {
+        console.log('----')
+        console.log(new Date(item.time).toLocaleString())
+        console.log(new Date(filterCodition.startTime).toLocaleString())
+        console.log(new Date(filterCodition.endTime).toLocaleString())
+        console.log('----')
+        if(item.time < filterCodition.startTime || item.time > filterCodition.endTime) {
+          return false
+        }
+      }
       if (filterCodition.onlyshowValid) {
         return item.validate === 1
       }
@@ -83,6 +95,16 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           }}
           options={MAIN_COINS.map((item) => ({ label: item, value: item }))}
         />
+        <DatePicker.RangePicker
+        onChange={(v) => {
+          setfilterCodition({
+            ...filterCodition,
+            // @ts-ignore
+            startTime: v[0].valueOf(),
+            // @ts-ignore
+            endTime: v[1].valueOf()
+          })
+        }}></DatePicker.RangePicker>
         <Checkbox checked={filterCodition.onlyshowValid} onChange={(e) => setfilterCodition({ ...filterCodition, onlyshowValid: e.target.checked })}>仅显示标记为有效</Checkbox>
         <Checkbox checked={filterCodition.onlyshowInvalid} onChange={(e) => setfilterCodition({ ...filterCodition, onlyshowInvalid: e.target.checked })}>仅显示标记为无效</Checkbox>
       </div>
