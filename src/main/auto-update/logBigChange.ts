@@ -29,7 +29,9 @@ function logBigChangeFn(coin, klines, notifyFn) {
   let level = 0
   AYALYSIS_TIME.forEach((time) => {
     const klineInfo = getKlineInfo(klines.slice(-time))
-    if (klineInfo!.changePercentNumber > alertSetting[time] / 100) {
+    const isOverThreshold = klineInfo!.changePercentNumber > alertSetting[time] / 100
+    const isInTrend = klineInfo?.isInTrendInRecent
+    if (isOverThreshold && isInTrend) {
       level += 1
       alertText += `${coin} - ${time}minute - ${klineInfo!.changePercentStr}\n`
     }
@@ -44,7 +46,7 @@ function logBigChangeFn(coin, klines, notifyFn) {
       time: Date.now(),
       validate: 0
     }
-    tableLog.updateLog(row)
+    tableLog.upsertLog(row)
   }
 }
 

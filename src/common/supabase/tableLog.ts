@@ -38,5 +38,6 @@ export const tableLog = {
   addLog,
   clearLog,
   updateLog,
-  deleteLog
+  deleteLog,
+  upsertLog
 }

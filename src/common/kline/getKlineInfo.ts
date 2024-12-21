@@ -40,6 +40,16 @@ export function getKlineInfo(klines: I_continuous_klines[]) {
     type,
     changePercentNumber: changePercent,
     changePercentStr,
+    isInTrendInRecent: getIsInTrendInRecent(klines, min, max, type),
     title: `浮动：${changePercentStr}% 趋势：${type} 最大值${max} 最小值${min}`
+  }
+}
+
+function getIsInTrendInRecent(kline: I_continuous_klines[],min: number, max: number,type: 'up' | 'down') {
+  const recentValue = (kline[kline.length - 1].end_time_price + kline[kline.length - 2].end_time_price) / 2
+  if (type === 'up') {
+    return recentValue > max * 0.995
+  } else {
+    return recentValue < min * 1.005
   }
 }
