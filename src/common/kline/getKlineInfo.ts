@@ -48,8 +48,8 @@ export function getKlineInfo(klines: I_continuous_klines[]) {
 function getIsInTrendInRecent(kline: I_continuous_klines[],min: number, max: number,type: 'up' | 'down') {
   const recentValue = (kline[kline.length - 1].end_time_price + kline[kline.length - 2].end_time_price) / 2
   if (type === 'up') {
-    return recentValue > max * 0.995
+    return recentValue > max * 0.994
   } else {
-    return recentValue < min * 1.005
+    return recentValue < min * 1.006
   }
 }
