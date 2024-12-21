@@ -18,7 +18,7 @@ export function SingleCoin({ coin, openAlertAll }) {
     setOpenAlert(openAlertAll)
     const timer = setTimeout(() => {
       setOpenAlert(true)
-    },1000 * 60 * 30)
+    },1000 * 60 * 60)
     return () => clearTimeout(timer)
   }, [openAlertAll])
   useEffect(() => {

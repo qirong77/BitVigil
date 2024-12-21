@@ -18,7 +18,9 @@ export function addLog(coin: string, alertLevel = 1, content = '') {
       return res
     })
 }
-
+export function upsertLog(row: I_log) {
+  return supabase.from('log').upsert(row)
+}
 export function getLog() {
   return supabase.from('log').select('*').order('time', { ascending: false })
 }
