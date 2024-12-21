@@ -3,7 +3,7 @@ import { getKlineInfo } from '../../common/kline/getKlineInfo'
 import { supabase } from '../../common/supabase'
 import { I_coin_alert_setting } from '../../common/supabase/tableCoinAlertSetting'
 import { tableLog } from '../../common/supabase/tableLog'
-import { isCoinOpenAlert } from '../notification'
+import { notifyCoin } from '../notification'
 
 const coinAlertSetting = new Map<string, I_coin_alert_setting>()
 async function initCoinAlertSetting() {
@@ -19,8 +19,7 @@ async function initCoinAlertSetting() {
     })
 }
 
-function logBigChangeFn(coin, klines, notifyFn) {
-  if (!isCoinOpenAlert(coin)) return
+function logBigChangeFn(coin, klines) {
   const alertSetting = coinAlertSetting.get(coin)
   if (!alertSetting) {
     return
@@ -37,9 +36,9 @@ function logBigChangeFn(coin, klines, notifyFn) {
     }
   })
   if (alertText) {
-    notifyFn('Coin Alert - ' + coin, alertText, coin)
+    notifyCoin('Coin Alert - ' + coin, alertText, coin)
     const row = {
-      id: new Date().getFullYear() + new Date().getMonth() + new Date().getDay() + alertText,
+      id: new Date().toLocaleString().slice(0, 13) + '-' + alertText,
       coin,
       level,
       content: alertText,
