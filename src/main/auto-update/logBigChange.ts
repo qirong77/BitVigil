@@ -3,6 +3,7 @@ import { getKlineInfo } from '../../common/kline/getKlineInfo'
 import { supabase } from '../../common/supabase'
 import { I_coin_alert_setting } from '../../common/supabase/tableCoinAlertSetting'
 import { tableLog } from '../../common/supabase/tableLog'
+import { I_continuous_klines } from '../../common/types'
 import { notifyCoin } from '../notification'
 
 const coinAlertSetting = new Map<string, I_coin_alert_setting>()
@@ -19,7 +20,7 @@ async function initCoinAlertSetting() {
     })
 }
 
-function logBigChangeFn(coin, klines) {
+function logBigChangeFn(coin, klines: I_continuous_klines[]) {
   const alertSetting = coinAlertSetting.get(coin)
   if (!alertSetting) {
     return
