@@ -3,6 +3,7 @@ import { ELECTRON_EVENT } from '../../common/electron-event'
 import { fetchContinuousKlines } from '../fetch-binance/fetchContinuousKlines'
 import { electronLog } from '../electron-log'
 import { chaneCoinAlertStatus, notifyCommon } from '../notification'
+import { fetchContinuousKlinesAll } from '../fetch-binance/fetchContinuousKlinesAll'
 
 ipcMain.handle(
   ELECTRON_EVENT.GET_KLINE,
@@ -19,4 +20,8 @@ ipcMain.handle(ELECTRON_EVENT.CHANGE_NOTIFICATION_STATUS, (_e, coin, status) => 
 })
 ipcMain.handle(ELECTRON_EVENT.NOTIFICATION, (_e, title, body) => {
   return notifyCommon(title, body)
+})
+
+ipcMain.handle(ELECTRON_EVENT.GET_KLINE_ALL, (_e, coin, interval, size) => {
+  return fetchContinuousKlinesAll(coin, interval, size)
 })
