@@ -1,1 +1,1 @@
-export const AYALYSIS_TIME = [15, 30, 60, 120, 240, 360, 480, 600]
+export const AYALYSIS_TIME = [1, 3, 5, 30, 120, 360, 480, 720]

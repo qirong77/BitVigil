@@ -55,6 +55,21 @@ function BinanceToTableData(coin: string, items: number[]) {
 }
 export function fetchContinuousKlines(coin = 'SUI', limit = 300, interval = 1, timeout = 1000 * 30, endTime = Date.now()) {
   return new Promise<I_continuous_klines[]>((resolve, reject) => {
+    const intervalMap = {
+      1: '1m',
+      5: '5m',
+      15: '15m',
+      30: '30m',
+      60: '1h',
+      120: '2h',
+      360: '6h',
+      480: '8h',
+      720: '12h',
+    }
+    const intervalParama = intervalMap[interval]
+    if(!intervalParama) {
+      return reject('不支持的时间间隔')
+    }
     let success = false
     setTimeout(() => {
       if (!success) {
@@ -62,7 +77,7 @@ export function fetchContinuousKlines(coin = 'SUI', limit = 300, interval = 1, t
       }
     }, timeout)
     fetch(
-      `https://www.binance.com/fapi/v1/continuousKlines?limit=${limit}&pair=${coin}USDT&contractType=PERPETUAL&interval=${interval}m&endTime=${endTime}`,
+      `https://www.binance.com/fapi/v1/continuousKlines?limit=${limit}&pair=${coin}USDT&contractType=PERPETUAL&interval=${intervalParama}&endTime=${endTime}`,
       {
         headers: REQUEST_HEADER,
         agent: proxyAgent,

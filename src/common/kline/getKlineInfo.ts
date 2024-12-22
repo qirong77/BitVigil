@@ -5,6 +5,7 @@ export interface IKlineInfo {
   type: 'up' | 'down'
   changePercentNumber: number
   changePercentStr: string
+  isInTrendInRecent: boolean
 }
 export function getKlineInfo(klines: I_continuous_klines[]) {
   if(!klines.length) {
