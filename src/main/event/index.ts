@@ -22,6 +22,7 @@ ipcMain.handle(ELECTRON_EVENT.NOTIFICATION, (_e, title, body) => {
   return notifyCommon(title, body)
 })
 
-ipcMain.handle(ELECTRON_EVENT.GET_KLINE_ALL, (_e, coin, interval, size) => {
-  return fetchContinuousKlinesAll(coin, interval, size)
+ipcMain.handle(ELECTRON_EVENT.GET_KLINE_ALL,async (_e, coin, interval, size) => {
+  const result = await fetchContinuousKlinesAll(coin, interval, size)
+  return result
 })

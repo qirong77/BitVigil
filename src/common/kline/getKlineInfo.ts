@@ -12,7 +12,7 @@ export function getKlineInfo(klines: I_continuous_klines[]) {
   }
   let minIndex = 0
   let maxIndex = 0
-  let type: 'up' | 'down' = 'up'
+  let type = klines[0].start_time_price > klines[0].end_time_price ? 'down' : 'up' as 'up' | 'down'
   let changePercent = 0
   let min = Math.min(klines[0].end_time_price,klines[0].start_time_price)
   let max = Math.max(klines[0].end_time_price,klines[0].start_time_price)
@@ -40,11 +40,11 @@ export function getKlineInfo(klines: I_continuous_klines[]) {
     min,
     max,
     type,
-    changePercentNumber: changePercent,
+    changePercentNumber: Number(changePercent.toFixed(4)),
     changePercentStr,
     isInTrendInRecent: klines.length > 2 && getIsInTrendInRecent(klines, min, max, type),
     title: `浮动：${changePercentStr}% 趋势：${type} 最大值${max} 最小值${min}`
-  }
+  } as IKlineInfo
 }
 
 function getIsInTrendInRecent(kline: I_continuous_klines[],min: number, max: number,type: 'up' | 'down') {

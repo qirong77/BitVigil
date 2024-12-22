@@ -9,6 +9,7 @@ export function KlineAlalysis({ coin }) {
     <Popover
       destroyTooltipOnHide
       placement="right"
+      trigger={'click'}
       content={
         <div style={{ width: '800px' }}>
           <CoinWaveTable coin={coin}/>
