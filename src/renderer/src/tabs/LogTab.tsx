@@ -161,37 +161,24 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
             dataIndex: 'time',
             width: 150,
             key: 'time',
-            render(value, record, index) {
-              return new Date(value).toLocaleString()
-            }
+            render
           },
-          { title: 'coin', dataIndex: 'coin', align: 'center', width: 100 },
-          { title: 'level', dataIndex: 'level', align: 'center', width: 100 },
+          { title: 'coin', dataIndex: 'coin', align: 'center', width: 100, render },
+          { title: 'level', dataIndex: 'level', align: 'center', width: 100, render },
           {
             title: '内容',
             dataIndex: 'content',
             key: 'content',
-            render(value, record, index) {
-              return (
-                <div
-                  style={{
-                    color:
-                      record.validate === 0 ? 'inherit' : record.validate === 1 ? 'green' : 'red'
-                  }}
-                >
-                  {value}
-                </div>
-              )
-            }
+            render
           },
           {
             title: '操作',
             key: 'operation',
             render(value, record, index) {
               return (
-                <div style={{ display: 'flex'}}>
+                <div style={{ display: 'flex' }}>
                   <Popover
-                  placement='bottom'
+                    placement="bottom"
                     content={
                       <div style={{ width: '800px' }}>
                         <SingleCoin coin={record.coin} openAlertAll={false} />
@@ -267,11 +254,23 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
               return new Date(value).toLocaleString()
             }
           },
-          { title: '标题', dataIndex: 'title',key: 'title' },
-          { title: '内容', dataIndex: 'content' ,key: 'content'}
+          { title: '标题', dataIndex: 'title', key: 'title' },
+          { title: '内容', dataIndex: 'content', key: 'content' }
         ]}
         dataSource={mainLogs}
       />
+    </div>
+  )
+}
+
+function render(value, record, index) {
+  return (
+    <div
+      style={{
+        color: record.validate === 0 ? 'inherit' : record.validate === 1 ? 'green' : 'red'
+      }}
+    >
+      {value}
     </div>
   )
 }
