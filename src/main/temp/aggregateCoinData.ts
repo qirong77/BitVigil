@@ -3,25 +3,26 @@ import { fetchContinuousKlinesAllBySize } from '../fetch-binance/fetchContinuous
 import { getCoinAnalysisMap } from '../../common/getCoinAnalysis'
 import { MAIN_COINS } from '../../common/coins/MAIN_COINS'
 import { AYALYSIS_TIME } from '../../common/const'
+import { E_CONTINOUS_KLINE_INTERVAL } from '../../common/types'
 const dir = import.meta.url.split('/').slice(0, -1).join('/').replace('file://', '')
 const targetFilePath = `${dir}/coin-klines/index.ts`
 async function aggregateCoinData(
   coin,
-  interval: 1 | 3 | 5 | 15 | 60 | 120 | 240,
-  size = 1000 * 10,
+  interval: E_CONTINOUS_KLINE_INTERVAL,
+  size = 1000 * 3,
   failRetry = 20,
   timeOut = 1000 * 60 * 10
 ) {
   const klines = await fetchContinuousKlinesAllBySize(coin, interval, size, failRetry, timeOut)
   const map = getCoinAnalysisMap(klines)
-  let beforeObject = JSON.parse(readFileSync(targetFilePath, 'utf-8'))
+  const o = JSON.parse(readFileSync(targetFilePath, 'utf-8'))
   const key = `${coin}_${interval}m`
-  beforeObject[key] = {
+  o[key] = {
     interval,
     size,
     map
   }
-  writeFileSync(targetFilePath, JSON.stringify(beforeObject))
+  writeFileSync(targetFilePath, JSON.stringify(o))
 }
 
 async function runTask() {
