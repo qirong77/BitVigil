@@ -36,7 +36,7 @@ CREATE TABLE public.coin_wave (
  */
 
 import { supabase } from '.'
-import { AYALYSIS_TIME } from '../const'
+import { ANALYSIS_TIME } from '../const'
 import { getKlineInfo } from '../kline/getKlineInfo'
 import { I_continuous_klines } from '../types'
 const TABLE_NAME = 'coin_wave_new'
@@ -90,7 +90,7 @@ function getTableRowCoinWave(coin: string) {
           resolve(res.data)
           return
         }
-        const rows = AYALYSIS_TIME.map((timeRange) => {
+        const rows = ANALYSIS_TIME.map((timeRange) => {
           return {
             id: `${coin}_${timeRange}`,
             coin_id: coin,

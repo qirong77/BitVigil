@@ -1,7 +1,7 @@
 import { Table } from 'antd'
 import { useEffect, useState } from 'react'
 import { I_continuous_klines } from '../../../../common/types'
-import { AYALYSIS_TIME } from '../../../../common/const'
+import { ANALYSIS_TIME } from '../../../../common/const'
 import { ELECTRON_EVENT } from '../../../../common/electron-event'
 import { getKlineInfo } from '../../../../common/kline/getKlineInfo'
 
@@ -14,7 +14,7 @@ export function CoinWaveTable({ coin }) {
   }, [])
   if (!klines.length) return null
   const tableRow = {}
-  AYALYSIS_TIME.forEach((time) => {
+  ANALYSIS_TIME.forEach((time) => {
     tableRow[time] = getKlineInfo(klines.slice(-time))?.changePercentStr
   })
   return (
@@ -23,7 +23,7 @@ export function CoinWaveTable({ coin }) {
       size="small"
       bordered
       rowKey={(record) => record[15]!}
-      columns={AYALYSIS_TIME.map((time) => ({ title: time + 'min', dataIndex: time }))}
+      columns={ANALYSIS_TIME.map((time) => ({ title: time + 'min', dataIndex: time }))}
       dataSource={[tableRow]}
     />
   )

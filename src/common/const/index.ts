@@ -1,2 +1,3 @@
+import { E_CONTINOUS_KLINE_INTERVAL } from '../types'
 
-export const AYALYSIS_TIME = [1, 3, 5, 30, 120, 360, 480, 720]
+export const ANALYSIS_TIME: E_CONTINOUS_KLINE_INTERVAL[] = [1, 3, 5, 30, 120, 360, 480, 720]

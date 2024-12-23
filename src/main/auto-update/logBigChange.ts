@@ -1,4 +1,4 @@
-import { AYALYSIS_TIME } from '../../common/const'
+import { ANALYSIS_TIME } from '../../common/const'
 import { getKlineInfo } from '../../common/kline/getKlineInfo'
 import { supabase } from '../../common/supabase'
 import { I_coin_alert_setting } from '../../common/supabase/tableCoinAlertSetting'
@@ -27,7 +27,7 @@ function logBigChangeFn(coin, klines: I_continuous_klines[]) {
   }
   let alertText = ''
   let level = 0
-  AYALYSIS_TIME.forEach((time) => {
+  ANALYSIS_TIME.forEach((time) => {
     const klineInfo = getKlineInfo(klines.slice(-time))
     const isOverThreshold = klineInfo!.changePercentNumber > alertSetting[time] / 100
     const isInTrend = klineInfo?.isInTrendInRecent

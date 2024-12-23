@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Radio } from 'antd'
-import { AYALYSIS_TIME } from '../../../../common/const'
+import { ANALYSIS_TIME } from '../../../../common/const'
 import { SingleCoinWavePieChar } from './SingleCoinWavePieChar/SingleCoinWavePieChar'
 
 export function SingleCoinWaveChar({ coin }: { coin: string }) {
@@ -15,7 +15,7 @@ export function SingleCoinWaveChar({ coin }: { coin: string }) {
           setRadioValue(e.target.value)
         }}
       >
-        {AYALYSIS_TIME.map((item) => {
+        {ANALYSIS_TIME.map((item) => {
           return (
             <Radio key={item + ''} value={item}>
               {item}

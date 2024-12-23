@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { fetchContinuousKlinesAllBySize } from '../fetch-binance/fetchContinuousKlinesAll'
 import { getCoinAnalysisMap } from '../../common/getCoinAnalysis'
 import { MAIN_COINS } from '../../common/coins/MAIN_COINS'
-import { AYALYSIS_TIME } from '../../common/const'
+import { ANALYSIS_TIME } from '../../common/const'
 import { E_CONTINOUS_KLINE_INTERVAL } from '../../common/types'
 const dir = import.meta.url.split('/').slice(0, -1).join('/').replace('file://', '')
 const targetFilePath = `${dir}/coin-klines/index.ts`
@@ -29,7 +29,7 @@ async function runTask() {
   writeFileSync(targetFilePath, '{}')
   try {
     for (const coin of MAIN_COINS) {
-      for (const interval of AYALYSIS_TIME) {
+      for (const interval of ANALYSIS_TIME) {
         const timeStart = Date.now()
         const taskName = `${coin}_${interval}m`
         console.log(taskName + ' start')

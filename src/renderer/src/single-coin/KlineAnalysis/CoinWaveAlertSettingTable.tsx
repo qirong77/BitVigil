@@ -1,6 +1,6 @@
 import { InputNumber, message, Table } from 'antd'
 import { useEffect, useRef, useState } from 'react'
-import { AYALYSIS_TIME } from '../../../../common/const'
+import { ANALYSIS_TIME } from '../../../../common/const'
 import {
   I_coin_alert_setting,
   tableCoinAlertSetting
@@ -24,7 +24,7 @@ export function CoinWaveAlertSettingTable({ coin }) {
       size="small"
       bordered
       rowKey={(record) => record[15]!}
-      columns={AYALYSIS_TIME.map((time) => {
+      columns={ANALYSIS_TIME.map((time) => {
         return {
           title: time + 'min',
           dataIndex: time,
