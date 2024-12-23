@@ -24,17 +24,26 @@ export async function fetchContinuousKlinesByDays(
 export async function fetchContinuousKlinesAllBySize(
   coin,
   interval: 1 | 3 | 5 | 15 | 60 | 120 | 240,
-  minSize = 1000 * 5
+  minSize = 1000 * 5,
+  failRetry = 5,
+  timeOut = 1000 * 60 * 10
 ) {
   const timeGap = interval * 60 * 1000 * 1000
   const klinesAll: I_continuous_klines[] = []
   const iteration = Math.ceil(minSize / SIZE_EVERY_REQUEST)
   for (let i = 0; i < iteration; i++) {
-    const klines = await fetchContinuousKlines(coin, {
-      limit: SIZE_EVERY_REQUEST,
-      interval,
-      endTime: Date.now() - i * timeGap
-    })
+    const klines = await fetchContinuousKlines(
+      coin,
+      {
+        limit: SIZE_EVERY_REQUEST,
+        interval,
+        endTime: Date.now() - i * timeGap
+      },
+      {
+        failRetry,
+        timeOut
+      }
+    )
     klinesAll.push(...klines)
   }
   return klinesAll
