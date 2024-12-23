@@ -53,7 +53,22 @@ function BinanceToTableData(coin: string, items: number[]) {
   }
   return obj
 }
-export function fetchContinuousKlines(coin = 'SUI', limit = 300, interval = 1, timeout = 1000 * 30, endTime = Date.now()) {
+export function fetchContinuousKlines(
+  coin = 'SUI',
+  requestPrama = {
+    limit: 300,
+    interval: 1,
+    endTime: Date.now()
+  } as {
+    limit?: number
+    interval?: 1 | 3 | 5 | 15 | 60 | 120 | 240
+    endTime?: number
+  },
+  requestConfig = {
+    failRetry: 5,
+    timeOut: 1000 * 30
+  }
+) {
   return new Promise<I_continuous_klines[]>((resolve, reject) => {
     const intervalMap = {
       1: '1m',
@@ -64,44 +79,55 @@ export function fetchContinuousKlines(coin = 'SUI', limit = 300, interval = 1, t
       120: '2h',
       360: '6h',
       480: '8h',
-      720: '12h',
+      720: '12h'
     }
-    const intervalParama = intervalMap[interval]
-    if(!intervalParama) {
+    const intervalParama = intervalMap[requestPrama.interval]
+    if (requestPrama.interval && !intervalParama) {
       return reject('不支持的时间间隔')
     }
-    let success = false
-    setTimeout(() => {
-      if (!success) {
+    let failTime = 0
+    let timeStart = Date.now()
+    const fetchWithRetry = () => {
+      const isTimeOut = requestConfig.timeOut && Date.now() - timeStart > requestConfig.timeOut
+      if (isTimeOut) {
         reject('请求超时')
+        return
       }
-    }, timeout)
-    fetch(
-      `https://www.binance.com/fapi/v1/continuousKlines?limit=${limit}&pair=${coin}USDT&contractType=PERPETUAL&interval=${intervalParama}&endTime=${endTime}`,
-      {
-        headers: REQUEST_HEADER,
-        agent: proxyAgent,
-        body: null,
-        method: 'GET'
-      }
-    )
-      .then((res) => {
-        res.json().then((data: any) => {
-          try {
-            const klineDatas = data.map((item) => {
-              return BinanceToTableData(coin, item)
-            })
-            resolve(klineDatas as I_continuous_klines[])
-            success = true
-          } catch (err) {
-            console.log(err, data)
-            resolve([])
+      fetch(
+        `https://www.binance.com/fapi/v1/continuousKlines?limit=${requestPrama.limit || 300}&pair=${coin}USDT&contractType=PERPETUAL&interval=${intervalParama}&endTime=${requestPrama.endTime || Date.now()}`,
+        {
+          headers: REQUEST_HEADER,
+          agent: proxyAgent,
+          body: null,
+          method: 'GET'
+        }
+      )
+        .then((res) => {
+          res.json().then((data: any) => {
+            try {
+              const klineDatas = data.map((item) => {
+                return BinanceToTableData(coin, item)
+              })
+              resolve(klineDatas as I_continuous_klines[])
+            } catch (err) {
+              console.log(err, data)
+              resolve([])
+            }
+          })
+        })
+        .catch((err) => {
+          console.log('fetchContinuousKlines请求失败')
+          failTime = failTime + 1
+          if (failTime < (requestConfig.failRetry || 3)) {
+            setTimeout(() => {
+              console.log(`重试第${failTime}次`, failTime)
+              fetchWithRetry()
+            }, 1000 * failTime)
+          } else {
+            reject(err)
           }
         })
-      })
-      .catch((err) => {
-        console.log(err)
-        resolve([])
-      })
+    }
+    fetchWithRetry()
   })
 }

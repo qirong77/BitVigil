@@ -8,7 +8,11 @@ export async function runAutoUpdateTask() {
   await logBigChange.initCoinAlertSetting()
   for (const coin of MAIN_COINS) {
     try {
-      const klines = await fetchContinuousKlines(coin, 600, 1, 1000 * 20)
+      const klines = await fetchContinuousKlines(coin,{
+        limit: 600,
+        interval: 1,
+        endTime: Date.now()
+      })
       logBigChange.logBigChangeFn(coin, klines)
     } catch (error) {
       // @ts-ignore

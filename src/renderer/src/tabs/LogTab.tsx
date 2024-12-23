@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
-import { Button, Checkbox, DatePicker, Divider, message, Select, Table } from 'antd'
+import { Button, Checkbox, DatePicker, Divider, message, Popover, Select, Table } from 'antd'
 import { I_log, tableLog } from '../../../common/supabase/tableLog'
 import { MAIN_COINS } from '../../../common/coins/MAIN_COINS'
+import { SingleCoin } from '../single-coin'
 interface I_log_main {
   id: string
   time: number
@@ -55,7 +56,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           return item.validate === 1
         }
         if (filterCodition.onlyshowInvalid) {
-          return item.validate === 0
+          return item.validate === -1
         }
         return true
       }) || []
@@ -169,18 +170,38 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
             title: '内容',
             dataIndex: 'content',
             render(value, record, index) {
-              return <div style={{ color: record.validate ? 'red' : 'inherit' }}>{value}</div>
+              return (
+                <div
+                  style={{
+                    color:
+                      record.validate === 0 ? 'inherit' : record.validate === 1 ? 'green' : 'red'
+                  }}
+                >
+                  {value}
+                </div>
+              )
             }
           },
           {
             title: '操作',
             render(value, record, index) {
               return (
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex'}}>
+                  <Popover
+                  placement='bottom'
+                    content={
+                      <div style={{ width: '800px' }}>
+                        <SingleCoin coin={record.coin} openAlertAll={false} />
+                      </div>
+                    }
+                    trigger={'click'}
+                  >
+                    <Button>查看详情</Button>
+                  </Popover>
                   <Button
                     type="link"
                     onClick={() => {
-                      const newRow = { ...record, validate: record.validate ? 0 : 1 }
+                      const newRow = { ...record, validate: 1 }
                       tableLog.updateLog(newRow).then((res) => {
                         if (res.status === 204) {
                           update()
@@ -190,7 +211,22 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
                       })
                     }}
                   >
-                    {record.validate ? '标记为无效' : '标记为有效'}{' '}
+                    标记为有效
+                  </Button>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      const newRow = { ...record, validate: -1 }
+                      tableLog.updateLog(newRow).then((res) => {
+                        if (res.status === 204) {
+                          update()
+                        } else {
+                          message.error('更新失败')
+                        }
+                      })
+                    }}
+                  >
+                    标记为无效
                   </Button>
                   <Button
                     type="link"

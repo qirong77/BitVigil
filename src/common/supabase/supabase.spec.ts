@@ -20,7 +20,7 @@ describe('supabase', () => {
   it(
     'updateTableRowCoinWave',
     async () => {
-      const klines = await fetchContinuousKlines('SUI', 600, 1)
+      const klines = await fetchContinuousKlines('SUI')
       const data = await tableCoinWave.updateTableRowCoinWave('SUI', klines)
       console.log(data)
       expect(data?.res?.status === 200).toBeTruthy()
