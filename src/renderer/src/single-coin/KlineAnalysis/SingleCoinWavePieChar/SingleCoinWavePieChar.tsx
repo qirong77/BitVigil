@@ -5,7 +5,7 @@ import { getKlineInfo, IKlineInfo } from '../../../../../common/kline/getKlineIn
 import * as echarts from 'echarts'
 import { getTicks } from './getTicks'
 import { Spin } from 'antd'
-const SIZE = 1000 * 30
+const SIZE = 1000 * 5
 const cacheMap = {}
 export function SingleCoinWavePieChar({ coin, interval = 5 }) {
   const containerRef = useRef<HTMLDivElement>(null)
