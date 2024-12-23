@@ -5,7 +5,7 @@ https://developers.binance.com/docs/zh-CN/derivatives/usds-margined-futures/mark
 import fetch from 'node-fetch'
 import { HttpsProxyAgent } from 'https-proxy-agent'
 import { REQUEST_HEADER } from './REQUEST_HEADER'
-import { I_continuous_klines } from '../../common/types'
+import { E_CONTINOUS_KLINE_INTERVAL, I_continuous_klines } from '../../common/types'
 // export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
 const proxyUrl = `http://127.0.0.1:7890`
 const proxyAgent = new HttpsProxyAgent(proxyUrl)
@@ -61,7 +61,7 @@ export function fetchContinuousKlines(
     endTime: Date.now()
   } as {
     limit?: number
-    interval?: 1 | 3 | 5 | 15 | 60 | 120 | 240
+    interval?: E_CONTINOUS_KLINE_INTERVAL
     endTime?: number
   },
   requestConfig = {
@@ -74,9 +74,7 @@ export function fetchContinuousKlines(
       1: '1m',
       3: '3m',
       5: '5m',
-      15: '15m',
       30: '30m',
-      60: '1h',
       120: '2h',
       360: '6h',
       480: '8h',
@@ -104,20 +102,15 @@ export function fetchContinuousKlines(
       )
         .then((res) => {
           res.json().then((data: any) => {
-            if(!Array.isArray(data)) {
-              console.log(data)
-              reject('请求失败')
-              return
-            }
-            try {
+            if (Array.isArray(data)) {
               const klineDatas = data.map((item) => {
                 return BinanceToTableData(coin, item)
               })
               resolve(klineDatas as I_continuous_klines[])
-            } catch (err) {
-              console.log(err, data)
-              resolve([])
+              return
             }
+            console.log('fetchContinuousKlines请求失败')
+            reject(data)
           })
         })
         .catch((err) => {

@@ -1,6 +1,6 @@
 import { it, expect, describe } from 'vitest'
 import { fetchContinuousKlines } from './fetchContinuousKlines'
-import { I_continuous_klines } from '../../common/types'
+import { E_CONTINOUS_KLINE_INTERVAL, I_continuous_klines } from '../../common/types'
 import { fetchContinuousKlinesAllBySize } from './fetchContinuousKlinesAll'
 
 describe('fetch-binance', () => {
@@ -21,5 +21,9 @@ describe('fetch-binance', () => {
       set.add(kline.start_time + '-' + kline.end_time)
     })
     expect(klines.length === set.size).toBeTruthy()
+  })
+  it('fetchContinuousKlinesAllBySize超出时间范围', async () => {
+    const klines = (await fetchContinuousKlinesAllBySize('SUI', E_CONTINOUS_KLINE_INTERVAL.SIX_HOUR, 1000 * 10)) as I_continuous_klines[]
+    console.log(klines.length)
   })
 })

@@ -8,29 +8,38 @@ const targetFilePath = `${dir}/coin-klines/index.ts`
 async function aggregateCoinData(
   coin,
   interval: 1 | 3 | 5 | 15 | 60 | 120 | 240,
-  size = 1000 * 3,
+  size = 1000 * 10,
   failRetry = 20,
   timeOut = 1000 * 60 * 10
 ) {
   const klines = await fetchContinuousKlinesAllBySize(coin, interval, size, failRetry, timeOut)
   const map = getCoinAnalysisMap(klines)
-  let beforeContent = readFileSync(targetFilePath, 'utf-8')
-  const newContent = `\nexport const ${coin}_${interval}m = ` + JSON.stringify(map, null, 4)
-  writeFileSync(targetFilePath, beforeContent + newContent)
+  let beforeObject = JSON.parse(readFileSync(targetFilePath, 'utf-8'))
+  const key = `${coin}_${interval}m`
+  beforeObject[key] = {
+    interval,
+    size,
+    map
+  }
+  writeFileSync(targetFilePath, JSON.stringify(beforeObject))
 }
 
 async function runTask() {
-  writeFileSync(targetFilePath, '')
-  for (const coin of MAIN_COINS) {
-    for (const interval of AYALYSIS_TIME) {
-      const timeStart = Date.now()
-      const taskName = `${coin}_${interval}m`
-      console.log(taskName + ' start')
-      // @ts-ignore
-      await aggregateCoinData(coin, interval)
-      const timeEnd = Date.now()
-      console.log(taskName + ' end', (timeEnd - timeStart) / 1000 + 's')
+  writeFileSync(targetFilePath, '{}')
+  try {
+    for (const coin of MAIN_COINS) {
+      for (const interval of AYALYSIS_TIME) {
+        const timeStart = Date.now()
+        const taskName = `${coin}_${interval}m`
+        console.log(taskName + ' start')
+        // @ts-ignore
+        await aggregateCoinData(coin, interval)
+        const timeEnd = Date.now()
+        console.log(taskName + ' end', (timeEnd - timeStart) / 1000 + 's')
+      }
     }
+  } catch (error) {
+    console.log(error)
   }
 }
 

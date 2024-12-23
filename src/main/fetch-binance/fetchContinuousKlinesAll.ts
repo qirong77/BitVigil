@@ -1,10 +1,10 @@
-import { I_continuous_klines } from '../../common/types'
+import { E_CONTINOUS_KLINE_INTERVAL, I_continuous_klines } from '../../common/types'
 import { fetchContinuousKlines } from './fetchContinuousKlines'
 
 const SIZE_EVERY_REQUEST = 1000
 export async function fetchContinuousKlinesByDays(
   coin,
-  interval: 1 | 3 | 5 | 15 | 60 | 120 | 240,
+  interval: E_CONTINOUS_KLINE_INTERVAL,
   days: number
 ) {
   const timeGap = interval * 60 * 1000 * 1000
@@ -16,6 +16,10 @@ export async function fetchContinuousKlinesByDays(
       interval,
       endTime: Date.now() - i * timeGap
     })
+    // 超出时间范围
+    if (klines.length === 0) {
+      return klinesAll
+    }
     klinesAll.push(...klines)
   }
   return klinesAll
@@ -23,12 +27,12 @@ export async function fetchContinuousKlinesByDays(
 
 export async function fetchContinuousKlinesAllBySize(
   coin,
-  interval: 1 | 3 | 5 | 15 | 60 | 120 | 240,
+  interval: E_CONTINOUS_KLINE_INTERVAL,
   minSize = 1000 * 5,
   failRetry = 5,
   timeOut = 1000 * 60 * 10
 ) {
-  const timeGap = interval * 60 * 1000 * 1000
+  const timeGap = interval * 60 * 1000 * SIZE_EVERY_REQUEST
   const klinesAll: I_continuous_klines[] = []
   const iteration = Math.ceil(minSize / SIZE_EVERY_REQUEST)
   for (let i = 0; i < iteration; i++) {
@@ -44,6 +48,10 @@ export async function fetchContinuousKlinesAllBySize(
         timeOut
       }
     )
+    // 超出时间范围
+    if (klines.length === 0) {
+      return klinesAll
+    }
     klinesAll.push(...klines)
   }
   return klinesAll

@@ -16,7 +16,6 @@ export interface I_continuous_klines {
   time: number
 }
 
-
 export interface I_coin_wave {
   id: string
   c_0_5: number
@@ -41,4 +40,15 @@ export interface I_coin_wave {
   c_95_100: number
   coin_id: string
   tag: number
+}
+
+export enum E_CONTINOUS_KLINE_INTERVAL {
+  ONE_MIN = 1,
+  THREE_MIN = 3,
+  FIVE_MIN = 5,
+  THIRTY_MIN = 30,
+  TWO_HOUR = 120,
+  SIX_HOUR = 360,
+  EIGHt_HOUR = 480,
+  HALF_DAY = 720
 }
