@@ -9,7 +9,10 @@ import { fetchContinuousKlinesAllBySize } from '../fetch-binance/fetchContinuous
 ipcMain.handle(
   ELECTRON_EVENT.GET_KLINE,
   (_e, coin, limit = 600, interval = 1) => {
-    return fetchContinuousKlines(coin, limit, interval)
+    return fetchContinuousKlines(coin, {
+      limit,
+      interval
+    })
   }
 )
 

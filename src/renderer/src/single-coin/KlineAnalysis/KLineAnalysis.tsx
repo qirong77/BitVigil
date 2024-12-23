@@ -1,8 +1,9 @@
 import { LineChartOutlined } from '@ant-design/icons'
 import { Popover } from 'antd'
-import { SingleCoinWaveBarChar } from './SingleCoinWaveBarChar'
+
 import { CoinWaveTable } from './CoinWaveTable'
 import { CoinWaveAlertSettingTable } from './CoinWaveAlertSettingTable'
+import { SingleCoinWaveChar } from './SingleCoinWaveChar'
 
 export function KlineAlalysis({ coin }) {
   return (
@@ -14,7 +15,7 @@ export function KlineAlalysis({ coin }) {
         <div style={{ width: '800px' }}>
           <CoinWaveTable coin={coin}/>
           <CoinWaveAlertSettingTable coin={coin}/>
-          <SingleCoinWaveBarChar coin={coin} />
+          <SingleCoinWaveChar coin={coin} />
         </div>
       }
     >

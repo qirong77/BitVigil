@@ -81,8 +81,7 @@ export function fetchContinuousKlines(
       480: '8h',
       720: '12h'
     }
-    const intervalParama = intervalMap[requestPrama.interval]
-    if (requestPrama.interval && !intervalParama) {
+    if (requestPrama.interval && !intervalMap[requestPrama.interval]) {
       return reject('不支持的时间间隔')
     }
     let failTime = 0
@@ -94,7 +93,7 @@ export function fetchContinuousKlines(
         return
       }
       fetch(
-        `https://www.binance.com/fapi/v1/continuousKlines?limit=${requestPrama.limit || 300}&pair=${coin}USDT&contractType=PERPETUAL&interval=${intervalParama}&endTime=${requestPrama.endTime || Date.now()}`,
+        `https://www.binance.com/fapi/v1/continuousKlines?limit=${requestPrama.limit || 300}&pair=${coin}USDT&contractType=PERPETUAL&interval=${intervalMap[requestPrama.interval!]}&endTime=${requestPrama.endTime || Date.now()}`,
         {
           headers: REQUEST_HEADER,
           agent: proxyAgent,

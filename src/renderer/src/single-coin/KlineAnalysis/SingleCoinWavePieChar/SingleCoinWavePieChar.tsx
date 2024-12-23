@@ -5,52 +5,64 @@ import { getKlineInfo, IKlineInfo } from '../../../../../common/kline/getKlineIn
 import * as echarts from 'echarts'
 import { getTicks } from './getTicks'
 import { Spin } from 'antd'
+const SIZE = 1000 * 30
+const cacheMap = {}
 export function SingleCoinWavePieChar({ coin, interval = 5 }) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const echartsInstanceRef = useRef<echarts.ECharts>(null)
   const [isLoading, setIsLoading] = useState(false)
-  useEffect(() => {
-    setIsLoading(true)
-    const size = 10
-    window.electron.ipcRenderer
-      .invoke(ELECTRON_EVENT.GET_KLINE_ALL, coin, interval, size)
-      .then((res: I_continuous_klines[]) => {
-        const changeInfos = res
-          .map((kline) => {
-            return getKlineInfo([kline])!
-          })
-          .sort((a, b) => {
-            return b!.changePercentNumber - a!.changePercentNumber
-          })
-        const days = (interval * size * 1000) / (60 * 24)
-        const map = getMap(changeInfos)
-        const echartsInstance = echarts.init(containerRef.current!)
-        echartsInstance.setOption({
-          tooltip: {
-            trigger: 'item'
-          },
-          legend: {
-            orient: 'vertical',
-            left: 'left'
-          },
-          series: [
-            {
-              type: 'pie',
-              data: Object.keys(map).map((key) => {
-                return {
-                  name: key,
-                  value: (map[key].items.length / days).toFixed(2)
-                }
-              }),
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-              }
+  const updateChar = (klines: I_continuous_klines[]) => {
+    const changeInfos = klines
+      .map((kline) => {
+        return getKlineInfo([kline])!
+      })
+      .sort((a, b) => {
+        return b!.changePercentNumber - a!.changePercentNumber
+      })
+    const days = (interval * klines.length) / (60 * 24)
+    const map = getMap(changeInfos)
+    echartsInstanceRef.current?.dispose()
+    const echartsInstance = echarts.init(containerRef.current!)
+    echartsInstance.setOption({
+      tooltip: {
+        trigger: 'item'
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left'
+      },
+      series: [
+        {
+          type: 'pie',
+          data: Object.keys(map).map((key) => {
+            return {
+              name: key,
+              value: (map[key].items.length / days).toFixed(2)
             }
-          ]
-        })
+          }),
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }
+      ]
+    })
+  }
+  useEffect(() => {
+    const key = `${coin}-${interval}`
+    if (cacheMap[key]) {
+      updateChar(cacheMap[key])
+      return
+    }
+    setIsLoading(true)
+    window.electron.ipcRenderer
+      .invoke(ELECTRON_EVENT.GET_KLINE_ALL, coin, interval, SIZE)
+      .then((res: I_continuous_klines[]) => {
+        cacheMap[key] = res
+        updateChar(res)
       })
       .finally(() => {
         setIsLoading(false)
