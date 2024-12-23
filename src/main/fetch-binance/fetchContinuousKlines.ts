@@ -56,7 +56,7 @@ function BinanceToTableData(coin: string, items: number[]) {
 export function fetchContinuousKlines(
   coin = 'SUI',
   requestPrama = {
-    limit: 300,
+    limit: 600,
     interval: 1,
     endTime: Date.now()
   } as {
@@ -66,7 +66,7 @@ export function fetchContinuousKlines(
   },
   requestConfig = {
     failRetry: 5,
-    timeOut: 1000 * 30
+    timeOut: 1000 * 60 * 5
   }
 ) {
   return new Promise<I_continuous_klines[]>((resolve, reject) => {
@@ -103,6 +103,11 @@ export function fetchContinuousKlines(
       )
         .then((res) => {
           res.json().then((data: any) => {
+            if(!Array.isArray(data)) {
+              console.log(data)
+              reject('请求失败')
+              return
+            }
             try {
               const klineDatas = data.map((item) => {
                 return BinanceToTableData(coin, item)

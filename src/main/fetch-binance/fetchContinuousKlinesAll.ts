@@ -29,7 +29,6 @@ export async function fetchContinuousKlinesAllBySize(
   const timeGap = interval * 60 * 1000 * 1000
   const klinesAll: I_continuous_klines[] = []
   const iteration = Math.ceil(minSize / SIZE_EVERY_REQUEST)
-  console.log(iteration)
   for (let i = 0; i < iteration; i++) {
     const klines = await fetchContinuousKlines(coin, {
       limit: SIZE_EVERY_REQUEST,

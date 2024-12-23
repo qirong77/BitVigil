@@ -196,7 +196,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
                     }
                     trigger={'click'}
                   >
-                    <Button>查看详情</Button>
+                    <Button type="link">查看详情</Button>
                   </Popover>
                   <Button
                     type="link"
