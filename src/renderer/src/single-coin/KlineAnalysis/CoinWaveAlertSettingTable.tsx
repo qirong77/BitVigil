@@ -29,6 +29,7 @@ export function CoinWaveAlertSettingTable({ coin }) {
           title: time + 'min',
           dataIndex: time,
           fixed: 'right',
+          key: time,
           render(value, record) {
             return (
               <InputNumber

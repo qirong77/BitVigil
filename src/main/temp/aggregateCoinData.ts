@@ -5,13 +5,14 @@ import { MAIN_COINS } from '../../common/coins/MAIN_COINS'
 import { ANALYSIS_TIME } from '../../common/const'
 import { E_CONTINOUS_KLINE_INTERVAL } from '../../common/types'
 const dir = import.meta.url.split('/').slice(0, -1).join('/').replace('file://', '')
-const targetFilePath = `${dir}/coin-klines/index.json`
+const targetFilePath = `${dir.replace('main/temp','common')}/coin-klines-statistic/index.json`
+console.log(targetFilePath)
 async function aggregateCoinData(
   coin,
   interval: E_CONTINOUS_KLINE_INTERVAL,
-  size = 1000 * 10 * 3,
+  size = 1000 * 10,
   failRetry = 20,
-  timeOut = 1000 * 60 * 10
+  timeOut = 1000 * 60 * 30
 ) {
   const klines = await fetchContinuousKlinesAllBySize(coin, interval, size, failRetry, timeOut)
   const map = getCoinAnalysisMap(klines)

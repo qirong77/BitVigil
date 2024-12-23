@@ -1,18 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { ELECTRON_EVENT } from '../../../../../common/electron-event'
-import { I_continuous_klines } from '../../../../../common/types'
+import { useEffect, useRef  } from 'react'
 import * as echarts from 'echarts'
-import { Spin } from 'antd'
-import { getCoinAnalysisMap } from '../../../../../common/getCoinAnalysis'
-const SIZE = 1000 * 5
-const cacheMap = {}
+import coinKlinesStatistic from '../../../../../common/coin-klines-statistic/index.json'
 export function SingleCoinWavePieChar({ coin, interval = 5 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const echartsInstanceRef = useRef<echarts.ECharts>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const updateChar = (klines: I_continuous_klines[]) => {
-    const map = getCoinAnalysisMap(klines)
-    const days = (interval * klines.length) / (60 * 24)
+  const updateChar = (map,days) => {
     echartsInstanceRef.current?.dispose()
     const echartsInstance = echarts.init(containerRef.current!)
     echartsInstance.setOption({
@@ -44,25 +36,13 @@ export function SingleCoinWavePieChar({ coin, interval = 5 }) {
     })
   }
   useEffect(() => {
-    const key = `${coin}-${interval}`
-    if (cacheMap[key]) {
-      updateChar(cacheMap[key])
-      return
-    }
-    setIsLoading(true)
-    window.electron.ipcRenderer
-      .invoke(ELECTRON_EVENT.GET_KLINE_ALL, coin, interval, SIZE)
-      .then((res: I_continuous_klines[]) => {
-        cacheMap[key] = res
-        updateChar(res)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
+    const key = `${coin}_${interval}m`
+    const data = coinKlinesStatistic[key]
+    const days = data.size * interval / 60 / 24
+    updateChar(data.map,days)
   }, [coin, interval])
   return (
     <div style={{ width: '100%' }}>
-      {isLoading && <Spin />}
       <div ref={containerRef} style={{ width: '100%', height: '300px' }}></div>
       <div></div>
     </div>

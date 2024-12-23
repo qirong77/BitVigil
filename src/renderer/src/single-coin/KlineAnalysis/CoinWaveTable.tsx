@@ -23,7 +23,7 @@ export function CoinWaveTable({ coin }) {
       size="small"
       bordered
       rowKey={(record) => record[15]!}
-      columns={ANALYSIS_TIME.map((time) => ({ title: time + 'min', dataIndex: time }))}
+      columns={ANALYSIS_TIME.map((time) => ({ title: time + 'min', dataIndex: time,key: time }))}
       dataSource={[tableRow]}
     />
   )

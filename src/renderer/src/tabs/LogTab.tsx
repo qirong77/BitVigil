@@ -160,6 +160,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
             title: '时间',
             dataIndex: 'time',
             width: 150,
+            key: 'time',
             render(value, record, index) {
               return new Date(value).toLocaleString()
             }
@@ -169,6 +170,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           {
             title: '内容',
             dataIndex: 'content',
+            key: 'content',
             render(value, record, index) {
               return (
                 <div
@@ -184,6 +186,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           },
           {
             title: '操作',
+            key: 'operation',
             render(value, record, index) {
               return (
                 <div style={{ display: 'flex'}}>
@@ -259,12 +262,13 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           {
             title: '时间',
             dataIndex: 'time',
+            key: 'time',
             render(value, record, index) {
               return new Date(value).toLocaleString()
             }
           },
-          { title: '标题', dataIndex: 'title' },
-          { title: '内容', dataIndex: 'content' }
+          { title: '标题', dataIndex: 'title',key: 'title' },
+          { title: '内容', dataIndex: 'content' ,key: 'content'}
         ]}
         dataSource={mainLogs}
       />
