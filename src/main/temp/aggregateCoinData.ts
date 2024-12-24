@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { fetchContinuousKlinesAllBySize } from '../fetch-binance/fetchContinuousKlinesAll'
 import { getCoinAnalysisMap } from '../../common/getCoinAnalysis'
 import { MAIN_COINS } from '../../common/coins/MAIN_COINS'
@@ -27,7 +27,9 @@ async function aggregateCoinData(
 }
 
 async function runTask() {
-  writeFileSync(targetFilePath, '{}')
+  if(!existsSync(targetFilePath)) {
+    writeFileSync(targetFilePath, '{}')
+  }
   try {
     for (const coin of MAIN_COINS) {
       for (const interval of ANALYSIS_TIME) {
