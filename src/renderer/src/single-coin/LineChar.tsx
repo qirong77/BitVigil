@@ -11,7 +11,7 @@ export function LineChar({
 }: {
   klines: I_continuous_klines[]
   klineInfo: IKlineInfo
-  updateKlineMethod: (limit?: number, interval?: number, immediate?: boolean) => void
+  updateKlineMethod: (limit?: number, immediate?: boolean) => void
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const echartInstance = useRef<echarts.ECharts>(null)
@@ -19,7 +19,7 @@ export function LineChar({
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          updateKlineMethod(600, 1, false)
+          updateKlineMethod(600, false)
         }
       })
     })

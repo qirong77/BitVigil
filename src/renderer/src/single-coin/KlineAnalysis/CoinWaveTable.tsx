@@ -8,7 +8,7 @@ import { getKlineInfo } from '../../../../common/kline/getKlineInfo'
 export function CoinWaveTable({ coin }) {
   const [klines, setKlines] = useState<I_continuous_klines[]>([])
   useEffect(() => {
-    window.electron.ipcRenderer.invoke(ELECTRON_EVENT.GET_KLINE, coin, 600, 1).then((res) => {
+    window.electron.ipcRenderer.invoke(ELECTRON_EVENT.GET_KLINE_ALL, coin, 1, 600).then((res) => {
       setKlines(res)
     })
   }, [])

@@ -26,4 +26,14 @@ describe('fetch-binance', () => {
     const klines = (await fetchContinuousKlinesAllBySize('SUI', E_CONTINOUS_KLINE_INTERVAL.SIX_HOUR, 1000 * 10)) as I_continuous_klines[]
     console.log(klines.length)
   })
+  it('fetchContinuousKlinesAllBySize小范围', async () => {
+    const klines = (await fetchContinuousKlinesAllBySize('SUI', E_CONTINOUS_KLINE_INTERVAL.ONE_MIN, 600)) as I_continuous_klines[]
+    console.log(klines.length)
+    expect(klines.length === 600).toBeTruthy()
+  })
+  it('fetchContinuousKlinesAllBySize较大范围', async () => {
+    const klines = (await fetchContinuousKlinesAllBySize('SUI', E_CONTINOUS_KLINE_INTERVAL.ONE_MIN, 3500)) as I_continuous_klines[]
+    console.log(klines.length)
+    expect(klines.length === 3500).toBeTruthy()
+  })
 })

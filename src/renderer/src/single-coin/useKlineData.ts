@@ -9,22 +9,19 @@ export function useKlineData(coin: string) {
   const [updateTime, setUpdateTime] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const lastUpdateTime = useRef(0)
-  const update = useCallback((limit = 600, interval = 1, immediate = true) => {
+  const update = useCallback((size = 600, immediate = true) => {
     if (!immediate && lastUpdateTime.current + 1000 * 60 * 3 > Date.now()) return
     setIsLoading(true)
     return window.electron.ipcRenderer
-      .invoke(ELECTRON_EVENT.GET_KLINE, coin, limit, interval)
-      .then((res) => {
+      .invoke(ELECTRON_EVENT.GET_KLINE_ALL, coin, 1, size)
+      .then((res: I_continuous_klines[]) => {
         if (Array.isArray(res) && res.length) {
+          res = res.sort((a, b) => a.end_time - b.end_time).slice(-size)
           setKlines(res)
           setUpdateTime(Date.now())
           lastUpdateTime.current = Date.now()
           return
         }
-        // 失败的概率比较大，所以在 10 秒内重试
-        setTimeout(() => update(limit, interval, immediate), 1000 * 10)
-        // message.error('获取k线数据失败')
-        // console.log(res)
       })
       .finally(() => setIsLoading(false))
   }, [])

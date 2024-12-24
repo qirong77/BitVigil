@@ -22,7 +22,7 @@ export function SingleCoin({ coin, openAlertAll }) {
     return () => clearTimeout(timer)
   }, [openAlertAll])
   useEffect(() => {
-    const fn = () => klineData.update(600, 1, true)
+    const fn = () => klineData.update(600, false)
     CoinTabEmitter.on('refresh', fn)
     return () => CoinTabEmitter.off('refresh', fn)
   }, [klineData.update])
