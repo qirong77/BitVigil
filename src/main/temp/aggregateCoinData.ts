@@ -10,7 +10,7 @@ console.log(targetFilePath)
 async function aggregateCoinData(
   coin,
   interval: E_CONTINOUS_KLINE_INTERVAL,
-  size = 1000 * 10,
+  size = 1000 * 10 * 8,
   failRetry = 20,
   timeOut = 1000 * 60 * 30
 ) {
@@ -31,7 +31,7 @@ async function runTask() {
     writeFileSync(targetFilePath, '{}')
   }
   try {
-    for (const coin of MAIN_COINS) {
+    for (const coin of ['1000FLOKI']) {
       for (const interval of ANALYSIS_TIME) {
         const timeStart = Date.now()
         const taskName = `${coin}_${interval}m`
