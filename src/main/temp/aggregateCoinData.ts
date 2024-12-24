@@ -31,7 +31,7 @@ async function runTask() {
     writeFileSync(targetFilePath, '{}')
   }
   try {
-    for (const coin of ['1000FLOKI']) {
+    for (const coin of MAIN_COINS) {
       for (const interval of ANALYSIS_TIME) {
         const timeStart = Date.now()
         const taskName = `${coin}_${interval}m`
