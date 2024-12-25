@@ -161,7 +161,7 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
             dataIndex: 'time',
             width: 150,
             key: 'time',
-            render
+            render: (value, record, index) => render(value, record, index, true)
           },
           { title: 'coin', dataIndex: 'coin', align: 'center', width: 100, render },
           { title: 'level', dataIndex: 'level', align: 'center', width: 100, render },
@@ -263,14 +263,14 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
   )
 }
 
-function render(value, record, index) {
+function render(value, record, index, isTime = false) {
   return (
     <div
       style={{
         color: record.validate === 0 ? 'inherit' : record.validate === 1 ? 'green' : 'red'
       }}
     >
-      {value}
+      {isTime ? new Date(value).toLocaleString() : value}
     </div>
   )
 }
