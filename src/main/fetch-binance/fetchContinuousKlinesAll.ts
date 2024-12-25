@@ -50,9 +50,9 @@ export async function fetchContinuousKlinesAllBySize(
     )
     // 超出时间范围
     if (klines.length === 0) {
-      return klinesAll
+      return klinesAll.sort((a, b) => a.end_time - b.end_time)
     }
     klinesAll.push(...klines)
   }
-  return klinesAll
+  return klinesAll.sort((a, b) => a.end_time - b.end_time)
 }
