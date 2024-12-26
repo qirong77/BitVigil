@@ -3,14 +3,15 @@ import { supabase } from '.'
 const TABLE_NAME = 'coin_alert_setting'
 export interface I_coin_alert_setting {
   id: string
-  15: number
+  1: number
+  3: number
+  5: number
   30: number
-  60: number
   120: number
-  240: number
   360: number
   480: number
   600: number
+  720: number
 }
 function getCoinAlertSetting(coin: string) {
   return new Promise<I_coin_alert_setting>((resolve, reject) => {
@@ -27,16 +28,17 @@ function getCoinAlertSetting(coin: string) {
           resolve(res.data[0])
           return
         }
-        const newRow = {
+        const newRow: I_coin_alert_setting = {
           id: coin,
-          15: 10,
+          1: 0.8,
+          3: 1.5,
+          5: 2,
           30: 10,
-          60: 10,
           120: 10,
-          240: 10,
           360: 10,
           480: 10,
-          600: 10
+          600: 10,
+          720: 10
         }
         supabase
           .from(TABLE_NAME)

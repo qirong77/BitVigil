@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Emitter } from '../common/events'
 import { ELECTRON_EVENT } from '../../../common/electron-event'
 export const CoinTabEmitter = new Emitter()
-export function CoinTab() {
+export function CoinTab({ coins = MAIN_COINS }) {
   const [openAlert, setOpenAlert] = useState(true)
   return (
     <div>
@@ -27,7 +27,7 @@ export function CoinTab() {
         </Button>
       </div>
       <Divider />
-      {MAIN_COINS.map((item) => (
+      {coins.map((item) => (
         <SingleCoin openAlertAll={openAlert} key={item} coin={item} />
       ))}
     </div>
