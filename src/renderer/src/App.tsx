@@ -1,6 +1,5 @@
 import { Tabs } from 'antd'
 import { CoinTab } from './tabs/CoinTab'
-import LogTab from './tabs/LogTab'
 import { useState } from 'react'
 import { NoteBook } from './tabs/Notebook'
 import { CoinTabMeme } from './tabs/CoinTabMeme'
@@ -15,11 +14,6 @@ export default function App() {
         items={[
           { label: 'Home', key: 'Home', children: <CoinTab /> },
           { label: 'Meme', key: 'CoinTabMeme', children: <CoinTabMeme /> },
-          {
-            label: 'Log',
-            key: 'Log',
-            children: <LogTab isActiveTab={activeTabKey === 'Log'} />
-          },
           {
             label: 'Note',
             key: 'Note',
