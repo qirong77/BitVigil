@@ -10,9 +10,13 @@ import { tableCoinAlertSetting } from '../../../common/supabase/tableCoinAlertSe
 
 export function SingleCoin({ coin }) {
   const klineData = useKlineData(coin)
-  const [openAlert, setOpenAlert] = useState(true)
+  const [openAlert, setOpenAlert] = useState(false)
   useEffect(() => {
-    tableCoinAlertSetting.changeAlert(coin, openAlert)
+    tableCoinAlertSetting.changeAlert(coin, openAlert).then(() => {
+      tableCoinAlertSetting.getCoinAlertSetting(coin).then((res) => {
+        setOpenAlert(res.open_alert || false)
+      })
+    })
     const timer = setTimeout(
       () => {
         setOpenAlert(true)
@@ -27,6 +31,11 @@ export function SingleCoin({ coin }) {
     return () => CoinTabEmitter.off('refresh', fn)
   }, [klineData.update])
   useEffect(() => {
+    tableCoinAlertSetting.getCoinAlertSetting(coin).then((res) => {
+      if (res) {
+        setOpenAlert(res.open_alert || false)
+      }
+    })
     const fn = (value) => {
       setOpenAlert(value)
     }
