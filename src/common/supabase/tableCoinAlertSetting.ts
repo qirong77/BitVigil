@@ -61,7 +61,6 @@ function setCoinAlertSetting(coin: string, data: I_coin_alert_setting) {
   return supabase.from(TABLE_NAME).update(data).eq('id', coin)
 }
 function changeAlert(coin, value) {
-  console.log(coin, value)
   return supabase.from(TABLE_NAME).update({ open_alert: value }).eq('id', coin)
 }
 
