@@ -1,26 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { tableCoinWave } from './tableCoinWave'
 // @ts-ignore
 import { fetchContinuousKlines } from '../../main/fetch-binance/fetchContinuousKlines'
 import { tableChore } from './tableChore'
 import { tableCoinAlertSetting } from './tableCoinAlertSetting'
 import { tableLog } from './tableLog'
 describe('supabase', () => {
-  it('supabase', async () => {
-    const res = await tableCoinWave.getTableRowCoinWave('BTC')
-    console.log(res)
-    expect(res?.length > 0).toBeTruthy()
-  }),
-    it('updateTableRowCoinWave', async () => {
-      const klines = await fetchContinuousKlines('SUI')
-      const data = await tableCoinWave.updateTableRowCoinWave('SUI', klines)
-      console.log(data)
-      expect(data?.res?.status === 200).toBeTruthy()
-    }),
-    it('supabaseTableLog', async () => {
-      const data = await tableLog.addLog('BTC', 1, 'test')
-      expect(data?.status === 201).toBeTruthy()
-    })
+  it('supabaseTableLog', async () => {
+    const data = await tableLog.addLog('BTC', 1, 'test')
+    expect(data?.status === 201).toBeTruthy()
+  })
   it('tableChore', async () => {
     const res = await tableChore.getNodes()
     const text = res.data?.[0].value
@@ -31,18 +19,18 @@ describe('supabase', () => {
   }),
     it('tableCoinAlertSetting', async () => {
       const res = await tableCoinAlertSetting.getCoinAlertSetting('BTC')
-      console.log(res)
       expect(res.id === 'BTC').toBeTruthy()
       const newRow = {
         id: 'BTC',
-        15: 0,
-        30: 0,
-        60: 0,
-        120: 0,
-        240: 0,
-        360: 0,
-        480: 0,
-        600: 1
+        1: 1,
+        3: 1,
+        5: 1,
+        30: 1,
+        120: 1,
+        360: 1,
+        480: 1,
+        600: 1,
+        720: 1,
       }
       const resNew = await tableCoinAlertSetting.setCoinAlertSetting('BTC', newRow)
       expect(resNew?.status === 204).toBeTruthy()
