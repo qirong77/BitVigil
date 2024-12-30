@@ -20,7 +20,10 @@ export function addLog(coin: string, alertLevel = 1, content = '') {
 }
 export function upsertLog(row: I_log) {
   return supabase.from('log').upsert(row).then((res) => {
-    console.log(res)
+    if(res.error) {
+      console.log('出错：')
+      console.log(res.error)
+    }
   })
 }
 export function getLog() {
