@@ -5,27 +5,34 @@ import { useEffect, useState } from 'react'
 import { Spin } from 'antd'
 import { KlineTimeFilter } from './KlineTimeFilter'
 import { KlineAlalysis } from './KlineAnalysis/KLineAnalysis'
-import { ELECTRON_EVENT } from '../../../common/electron-event'
 import { CoinTabEmitter } from '../tabs/CoinTab'
+import { tableCoinAlertSetting } from '../../../common/supabase/tableCoinAlertSetting'
 
-export function SingleCoin({ coin, openAlertAll }) {
+export function SingleCoin({ coin }) {
   const klineData = useKlineData(coin)
-  const [openAlert, setOpenAlert] = useState(openAlertAll)
+  const [openAlert, setOpenAlert] = useState(true)
   useEffect(() => {
-    window.electron.ipcRenderer.invoke(ELECTRON_EVENT.CHANGE_NOTIFICATION_STATUS, coin, openAlert)
-  }, [openAlert])
-  useEffect(() => {
-    setOpenAlert(openAlertAll)
-    const timer = setTimeout(() => {
-      setOpenAlert(true)
-    },1000 * 60 * 60)
+    tableCoinAlertSetting.changeAlert(coin, openAlert)
+    const timer = setTimeout(
+      () => {
+        setOpenAlert(true)
+      },
+      1000 * 60 * 60
+    )
     return () => clearTimeout(timer)
-  }, [openAlertAll])
+  }, [openAlert])
   useEffect(() => {
     const fn = () => klineData.update(600, false)
     CoinTabEmitter.on('refresh', fn)
     return () => CoinTabEmitter.off('refresh', fn)
   }, [klineData.update])
+  useEffect(() => {
+    const fn = (value) => {
+      setOpenAlert(value)
+    }
+    CoinTabEmitter.on('changeAlert', fn)
+    return () => CoinTabEmitter.off('changeAlert', fn)
+  }, [coin])
   return (
     <div style={{ marginBottom: '20px' }}>
       <div

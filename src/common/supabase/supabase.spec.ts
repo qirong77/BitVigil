@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 // @ts-ignore
 import { fetchContinuousKlines } from '../../main/fetch-binance/fetchContinuousKlines'
 import { tableChore } from './tableChore'
-import { tableCoinAlertSetting } from './tableCoinAlertSetting'
+import { I_coin_alert_setting, tableCoinAlertSetting } from './tableCoinAlertSetting'
 import { tableLog } from './tableLog'
 describe('supabase', () => {
   it('supabaseTableLog', async () => {
@@ -20,7 +20,7 @@ describe('supabase', () => {
     it('tableCoinAlertSetting', async () => {
       const res = await tableCoinAlertSetting.getCoinAlertSetting('BTC')
       expect(res.id === 'BTC').toBeTruthy()
-      const newRow = {
+      const newRow: I_coin_alert_setting = {
         id: 'BTC',
         1: 1,
         3: 1,
@@ -30,7 +30,7 @@ describe('supabase', () => {
         360: 1,
         480: 1,
         600: 1,
-        720: 1,
+        720: 1
       }
       const resNew = await tableCoinAlertSetting.setCoinAlertSetting('BTC', newRow)
       expect(resNew?.status === 204).toBeTruthy()

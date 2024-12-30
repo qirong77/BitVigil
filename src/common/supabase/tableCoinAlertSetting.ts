@@ -12,6 +12,9 @@ export interface I_coin_alert_setting {
   480: number
   600: number
   720: number
+  gt?: number
+  lt?: number
+  open_alert?: boolean
 }
 function getCoinAlertSetting(coin: string) {
   return new Promise<I_coin_alert_setting>((resolve, reject) => {
@@ -57,8 +60,13 @@ function getCoinAlertSetting(coin: string) {
 function setCoinAlertSetting(coin: string, data: I_coin_alert_setting) {
   return supabase.from(TABLE_NAME).update(data).eq('id', coin)
 }
+function changeAlert(coin, value) {
+  console.log(coin, value)
+  return supabase.from(TABLE_NAME).update({ open_alert: value }).eq('id', coin)
+}
 
 export const tableCoinAlertSetting = {
   getCoinAlertSetting,
-  setCoinAlertSetting
+  setCoinAlertSetting,
+  changeAlert
 }

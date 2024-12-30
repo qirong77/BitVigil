@@ -4,7 +4,7 @@ import { supabase } from '../../common/supabase'
 import { I_coin_alert_setting } from '../../common/supabase/tableCoinAlertSetting'
 import { tableLog } from '../../common/supabase/tableLog'
 import { I_continuous_klines } from '../../common/types'
-import { notifyCoin } from '../notification'
+import { Notification } from 'electron'
 
 const coinAlertSetting = new Map<string, I_coin_alert_setting>()
 async function initCoinAlertSetting() {
@@ -27,6 +27,15 @@ function logBigChangeFn(coin, klines: I_continuous_klines[]) {
   }
   let alertText = ''
   let level = 0
+  const lastPrice = klines.at(-1)?.end_time_price
+  if (lastPrice && alertSetting.gt && lastPrice > alertSetting.gt) {
+    level += 1
+    alertText += `${coin} - gt - ${lastPrice}\n`
+  }
+  if (lastPrice && alertSetting.lt && lastPrice < alertSetting.lt) {
+    level += 1
+    alertText += `${coin} - lt - ${lastPrice}\n`
+  }
   ANALYSIS_TIME.forEach((time) => {
     const klineInfo = getKlineInfo(klines.slice(-time))
     const isOverThreshold = klineInfo!.changePercentNumber > alertSetting[time] / 100
@@ -36,8 +45,12 @@ function logBigChangeFn(coin, klines: I_continuous_klines[]) {
       alertText += `${coin} - ${time}minute - ${klineInfo!.changePercentStr}\n`
     }
   })
-  if (alertText) {
-    notifyCoin('Coin Alert - ' + coin, alertText, coin)
+  if (alertText && alertSetting.open_alert) {
+    const notification = new Notification({
+      title: 'Coin Alert - ' + coin,
+      body: alertText
+    })
+    notification.show()
     const row = {
       id: new Date().toLocaleString().slice(0, 13) + '-' + alertText,
       coin,
