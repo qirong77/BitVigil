@@ -45,7 +45,7 @@ async function logBigChangeFn(coin, klines: I_continuous_klines[]) {
       alertText += `${coin} - ${time}minute - ${klineInfo!.changePercentStr}\n`
     }
   })
-  if (alertText && alertSetting) {
+  if (alertText && alertSetting.open_alert) {
     await initCoinAlertSetting()
     const notification = new Notification({
       title: 'Coin Alert - ' + coin,
