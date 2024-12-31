@@ -4,6 +4,8 @@ import { Button, Checkbox, DatePicker, Divider, message, Popover, Select, Table 
 import { I_log, tableLog } from '../../../common/supabase/tableLog'
 import { MAIN_COINS } from '../../../common/coins/MAIN_COINS'
 import { SingleCoin } from '../single-coin'
+import dayjs from 'dayjs'
+
 interface I_log_main {
   id: string
   time: number
@@ -18,8 +20,8 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
     selectCoins: [] as string[],
     onlyshowValid: false,
     onlyshowInvalid: false,
-    startTime: 0,
-    endTime: 0,
+    startTime: new Date().getTime(),
+    endTime: new Date().getTime() + 24 * 60 * 60 * 1000,
     levels: [] as number[]
   })
   const update = () => {
@@ -63,7 +65,16 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
     )
   }
   useEffect(() => {
-    isActiveTab && update()
+    if(!isActiveTab) return
+    update()
+    setfilterCodition({
+      selectCoins: [] as string[],
+      onlyshowValid: false,
+      onlyshowInvalid: false,
+      startTime: new Date().getTime() - 24 * 60 * 60 * 1000,
+      endTime: new Date().getTime(),
+      levels: [] as number[]
+    })
   }, [isActiveTab])
   return (
     <div>
@@ -122,6 +133,8 @@ export default function LogTab({ isActiveTab }: { isActiveTab: boolean }) {
           }}
         />
         <DatePicker.RangePicker
+          value={[dayjs(filterCodition.startTime), dayjs(filterCodition.endTime)]}
+          // format="YYYY-MM-DD HH:mm"
           onChange={(v) => {
             setfilterCodition({
               ...filterCodition,

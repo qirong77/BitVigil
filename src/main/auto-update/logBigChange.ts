@@ -20,7 +20,7 @@ async function initCoinAlertSetting() {
     })
 }
 
-function logBigChangeFn(coin, klines: I_continuous_klines[]) {
+async function logBigChangeFn(coin, klines: I_continuous_klines[]) {
   const alertSetting = coinAlertSetting.get(coin)
   if (!alertSetting) {
     return
@@ -30,11 +30,11 @@ function logBigChangeFn(coin, klines: I_continuous_klines[]) {
   const lastPrice = klines.at(-1)?.end_time_price
   if (lastPrice && alertSetting.gt && lastPrice > alertSetting.gt) {
     level += 1
-    alertText += `${coin} - gt - ${lastPrice}\n`
+    alertText += `${coin} > ${alertSetting.gt}(${lastPrice})\n`
   }
   if (lastPrice && alertSetting.lt && lastPrice < alertSetting.lt) {
     level += 1
-    alertText += `${coin} - lt - ${lastPrice}\n`
+    alertText += `${coin} < ${alertSetting.lt}(${lastPrice})\n`
   }
   ANALYSIS_TIME.forEach((time) => {
     const klineInfo = getKlineInfo(klines.slice(-time))
@@ -45,7 +45,8 @@ function logBigChangeFn(coin, klines: I_continuous_klines[]) {
       alertText += `${coin} - ${time}minute - ${klineInfo!.changePercentStr}\n`
     }
   })
-  if (alertText && alertSetting.open_alert) {
+  if (alertText && alertSetting) {
+    await initCoinAlertSetting()
     const notification = new Notification({
       title: 'Coin Alert - ' + coin,
       body: alertText
